@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="com.reservation.salles.ui.controller.UserDashboardController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="960" prefHeight="540"
+            styleClass="root-pane">
+
+    <top>
+        <HBox spacing="16" styleClass="top-bar">
+            <padding>
+                <Insets topRightBottomLeft="16"/>
+            </padding>
+            <children>
+                <Label text="Réservation de Salles" styleClass="title-label"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="24">
+            <padding>
+                <Insets topRightBottomLeft="24"/>
+            </padding>
+            <children>
+
+                <!-- barre d'onglets -->
+                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                    <children>
+                        <Button text="Tableau de bord"
+                                styleClass="nav-pill nav-pill-active"/>
+                        <Button text="Historique des réservations" onAction="#handleMesReservations"
+                                styleClass="nav-pill"/>
+                    </children>
+                </HBox>
+
+                <!-- barre de recherche -->
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <TextField fx:id="searchField" promptText="Rechercher une salle"
+                                   styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                    </children>
+                </HBox>
+
+                <!-- titre + compteur -->
+                <Label fx:id="totalSallesLabel" text="Toutes mes salles"
+                       styleClass="section-title"/>
+
+                <!-- grille de cartes de salles -->
+                <ScrollPane fitToWidth="true" prefViewportHeight="360"
+                            hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                    <content>
+                        <FlowPane fx:id="sallesFlow" hgap="24" vgap="24"
+                                  prefWrapLength="880"
+                                  styleClass="rooms-flow"/>
+                    </content>
+                </ScrollPane>
+
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
+

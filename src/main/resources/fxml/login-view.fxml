@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:controller="com.reservation.salles.ui.controller.LoginController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="960" prefHeight="540"
+            styleClass="root-pane">
+    <children>
+        <VBox spacing="18" alignment="CENTER_LEFT"
+              AnchorPane.topAnchor="80" AnchorPane.leftAnchor="220"
+              AnchorPane.rightAnchor="220" AnchorPane.bottomAnchor="80">
+            <children>
+                <Label text="Welcome Back!" styleClass="login-title"/>
+                <Label text="Continue with Google or enter your details"
+                       styleClass="login-subtitle"/>
+
+                <Label text="Username or email"/>
+                <TextField fx:id="emailField" promptText="exemple@gmail.com"
+                           maxWidth="340" styleClass="text-input"/>
+
+                <Label text="Password"/>
+                <PasswordField fx:id="passwordField" promptText="******"
+                               maxWidth="340" styleClass="text-input"/>
+
+                <Label fx:id="errorLabel" textFill="red"/>
+
+                <Button text="Login" onAction="#handleLogin"
+                        styleClass="primary-button" maxWidth="340"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
+
