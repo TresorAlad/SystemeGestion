@@ -60,8 +60,8 @@ CREATE TABLE demandes (
 );
 
 INSERT INTO utilisateurs (nom, email, mot_de_passe, role) VALUES
-('Utilisateur Test', 'user@example.com', 'password', 'UTILISATEUR'),
-('Gestionnaire Test', 'admin@example.com', 'admin', 'GESTIONNAIRE');
+('Utilisateur Test', 'user@esgis.org', 'password', 'UTILISATEUR'),
+('Gestionnaire Test', 'admin@esgis.org', 'admin', 'GESTIONNAIRE');
 
 INSERT INTO salles (nom, type, capacite, disponible, photo) VALUES
 ('Salle A', 'Réunion', 10, 1, 'jav.jpg'),
