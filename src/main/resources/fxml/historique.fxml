@@ -20,16 +20,25 @@
     </top>
 
     <center>
-        <VBox spacing="24" padding="24">
+        <VBox spacing="24">
+            <padding>
+                <Insets topRightBottomLeft="24"/>
+            </padding>
             <children>
 
-                <!-- nav comme sur le dashboard -->
+                <!-- onglets (même style que user-dashboard) -->
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
-                        <Button text="Tableau de bord" onAction="#handleGoDashboard"
-                                styleClass="nav-pill"/>
-                        <Button text="Historique des réservations"
-                                styleClass="nav-pill nav-pill-active"/>
+                        <Button text="Tableau de bord"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoDashboard"/>
+
+                        <Button text="Historique de réservation"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-dashboard"/>
                     </children>
                 </HBox>
 

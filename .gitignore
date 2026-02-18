@@ -1,0 +1,10 @@
+### Maven / build
+target/
+
+### Java
+*.class
+
+### Local databases / runtime artifacts
+*.db
+reservation.db
+

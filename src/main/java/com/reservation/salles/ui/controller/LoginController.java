@@ -63,5 +63,20 @@ public class LoginController {
             NotificationUtil.erreur("Erreur lors du chargement de l'écran suivant.");
         }
     }
+
+    @FXML
+    private void handleGoToRegister(ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/register-view.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            NotificationUtil.erreur("Erreur lors du chargement de l'écran d'inscription.");
+        }
+    }
 }
 

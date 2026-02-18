@@ -11,6 +11,23 @@ import java.sql.Statement;
 
 public class UtilisateurDAO {
 
+    public Utilisateur findByEmail(String email) {
+        String sql = "SELECT * FROM utilisateurs WHERE email = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Utilisateur findByEmailAndPassword(String email, String password) {
         String sql = "SELECT * FROM utilisateurs WHERE email = ? AND mot_de_passe = ?";
         try (Connection conn = DBConnection.getConnection();

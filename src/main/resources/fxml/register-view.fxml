@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:controller="com.reservation.salles.ui.controller.RegisterController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="960" prefHeight="540"
+            styleClass="root-pane">
+    <children>
+        <VBox spacing="14" alignment="CENTER"
+              AnchorPane.topAnchor="70" AnchorPane.leftAnchor="220"
+              AnchorPane.rightAnchor="220" AnchorPane.bottomAnchor="70"
+              styleClass="card">
+            <padding>
+                <Insets topRightBottomLeft="28"/>
+            </padding>
+            <children>
+                <Label text="Créer un compte" styleClass="login-title"/>
+                <Label text="Inscription utilisateur"
+                       styleClass="login-subtitle"/>
+
+                <Label text="Nom complet"/>
+                <TextField fx:id="fullNameField"
+                           promptText="Votre nom"
+                           maxWidth="340"
+                           styleClass="text-input"/>
+
+                <Label text="Email"/>
+                <TextField fx:id="emailField"
+                           promptText="exemple@gmail.com"
+                           maxWidth="340"
+                           styleClass="text-input"/>
+
+                <Label text="Mot de passe"/>
+                <PasswordField fx:id="passwordField"
+                               promptText="******"
+                               maxWidth="340"
+                               styleClass="text-input"/>
+
+                <Label text="Confirmer mot de passe"/>
+                <PasswordField fx:id="confirmPasswordField"
+                               promptText="******"
+                               maxWidth="340"
+                               styleClass="text-input"/>
+
+                <Label fx:id="errorLabel" textFill="red"/>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <children>
+                        <Button text="Retour"
+                                onAction="#handleGoToLogin"
+                                styleClass="secondary-button"
+                                maxWidth="160"/>
+                        <Button text="Créer un compte"
+                                onAction="#handleRegister"
+                                styleClass="primary-button"
+                                maxWidth="160"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
+

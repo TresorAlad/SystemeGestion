@@ -29,6 +29,15 @@
 
                 <Button text="Login" onAction="#handleLogin"
                         styleClass="primary-button" maxWidth="340"/>
+
+                <HBox alignment="CENTER" spacing="8">
+                    <children>
+                        <Label text="Pas de compte ?"/>
+                        <Button text="Créer un compte"
+                                onAction="#handleGoToRegister"
+                                styleClass="secondary-button"/>
+                    </children>
+                </HBox>
             </children>
         </VBox>
     </children>

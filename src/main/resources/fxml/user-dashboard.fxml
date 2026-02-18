@@ -33,10 +33,19 @@
                 <!-- barre d'onglets -->
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
-                        <Button text="Tableau de bord"
-                                styleClass="nav-pill nav-pill-active"/>
-                        <Button text="Historique des réservations" onAction="#handleMesReservations"
-                                styleClass="nav-pill"/>
+                        <Button fx:id="btnDashboard"
+                                text="Tableau de bord"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-dashboard"
+                                onAction="#goToDashboard"/>
+
+                        <Button fx:id="btnHistorique"
+                                text="Historique de réservation"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#goToHistorique"/>
                     </children>
                 </HBox>
 
