@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,6 +25,8 @@ public class HistoriqueController {
     @FXML
     private TableView<Reservation> reservationsTable;
     @FXML
+    private TableColumn<Reservation, String> colId;
+    @FXML
     private TableColumn<Reservation, String> colSalle;
     @FXML
     private TableColumn<Reservation, String> colDate;
@@ -31,6 +34,8 @@ public class HistoriqueController {
     private TableColumn<Reservation, String> colHeure;
     @FXML
     private TableColumn<Reservation, String> colStatut;
+    @FXML
+    private TableColumn<Reservation, String> colActions;
 
     private Utilisateur currentUser;
     private final ReservationService reservationService = new ReservationService();
@@ -44,6 +49,9 @@ public class HistoriqueController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
+            reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            colId.setCellValueFactory(
+                    cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getIdReservation())));
             colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));
             colDate.setCellValueFactory(cell -> new SimpleStringProperty(
                     cell.getValue().getDate() != null ? cell.getValue().getDate().toString() : ""));
@@ -78,6 +86,41 @@ public class HistoriqueController {
                     setGraphic(label);
                 }
             });
+
+            // Colonne Actions avec boutons
+            colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
+                private final Button annulerBtn = new Button("Annuler");
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                        setGraphic(null);
+                        return;
+                    }
+
+                    Reservation reservation = getTableRow().getItem();
+                    annulerBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
+                    annulerBtn.setOnAction(event -> {
+                        if ("VALIDEE".equals(reservation.getStatut()) || "EN_ATTENTE".equals(reservation.getStatut())) {
+                            reservationService.annulerReservation(reservation);
+                            NotificationUtil.info("Réservation annulée.");
+                            chargerReservations();
+                        } else {
+                            NotificationUtil.info("Cette réservation ne peut plus être annulée.");
+                        }
+                    });
+
+                    if ("VALIDEE".equals(reservation.getStatut()) || "EN_ATTENTE".equals(reservation.getStatut())) {
+                        annulerBtn.setStyle(
+                                "-fx-padding: 4 12 4 12; -fx-font-size: 11px; -fx-background-color: #f87171;");
+                        setGraphic(annulerBtn);
+                    } else {
+                        setGraphic(null);
+                    }
+                }
+            });
+
             reservationsTable.setItems(reservations);
         }
     }

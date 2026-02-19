@@ -9,7 +9,7 @@
             styleClass="root-pane">
 
     <top>
-        <HBox spacing="16" padding="16" styleClass="top-bar">
+        <HBox spacing="16" padding="16,16,16,16" styleClass="top-bar">
             <children>
                 <Label text="Réservation de Salles" styleClass="title-label"/>
             </children>

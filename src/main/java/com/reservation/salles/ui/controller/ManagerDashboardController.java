@@ -53,14 +53,11 @@ public class ManagerDashboardController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
-            colSalle.setCellValueFactory(cell ->
-                    new SimpleStringProperty(cell.getValue().getSalle().getNom()));
-            colDate.setCellValueFactory(cell ->
-                    new SimpleStringProperty(cell.getValue().getDate().toString()));
+            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));
+            colDate.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
             colHeure.setCellValueFactory(cell -> new SimpleStringProperty(
                     cell.getValue().getHeureDebut() + " - " + cell.getValue().getHeureFin()));
-            colStatut.setCellValueFactory(cell ->
-                    new SimpleStringProperty(cell.getValue().getStatut()));
+            colStatut.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatut()));
             recentesTable.setItems(reservationsRecentes);
         }
     }
@@ -98,6 +95,8 @@ public class ManagerDashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/salle-form.fxml"));
             Parent root = loader.load();
+            SalleFormController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
             Stage stage = (Stage) currentUserLabel.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
@@ -150,4 +149,3 @@ public class ManagerDashboardController {
         }
     }
 }
-

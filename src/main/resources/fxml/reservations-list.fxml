@@ -10,7 +10,7 @@
             styleClass="root-pane">
 
     <top>
-        <HBox spacing="16" padding="16" styleClass="top-bar">
+        <HBox spacing="16" padding="16,16,16,16" styleClass="top-bar">
             <children>
                 <Label text="Historique des réservations" styleClass="title-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
@@ -20,16 +20,27 @@
     </top>
 
     <center>
-        <VBox spacing="24" padding="24">
+        <VBox spacing="24" padding="24,24,24,24">
             <children>
 
                 <!-- nav comme sur le dashboard -->
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
-                        <Button text="Tableau de bord" onAction="#handleGoDashboard"
-                                styleClass="nav-pill"/>
+                        <Button text="Tableau de bord"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoDashboard"/>
                         <Button text="Historique des réservations"
-                                styleClass="nav-pill nav-pill-active"/>
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-dashboard"/>
+                        <Button text="Mes salles"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleMesSalles"/>
+                        <Button text="Ajouter Salle"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoToAddSalle"/>
                     </children>
                 </HBox>
 

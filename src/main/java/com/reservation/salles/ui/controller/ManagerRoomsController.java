@@ -99,13 +99,14 @@ public class ManagerRoomsController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/salle-form.fxml"));
             Parent root = loader.load();
-
+            SalleFormController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
             Stage stage = (Stage) sallesTable.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -123,4 +124,3 @@ public class ManagerRoomsController {
         }
     }
 }
-

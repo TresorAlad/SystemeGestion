@@ -41,23 +41,20 @@
                     </children>
                 </HBox>
 
-                <VBox spacing="12" styleClass="card">
-                    <children>
-                        <TableView fx:id="reservationsTable" prefHeight="360">
-                            <columns>
-                                <TableColumn fx:id="colSalle" text="Salle" prefWidth="220"/>
-                                <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
-                                <TableColumn fx:id="colHeure" text="Horaire" prefWidth="180"/>
-                                <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
-                            </columns>
-                        </TableView>
+                <TableView fx:id="reservationsTable"
+           prefHeight="360"
+           styleClass="modern-table">
 
-                        <Button text="Annuler la réservation sélectionnée"
-                                onAction="#handleAnnuler"
-                                styleClass="danger-button"
-                                maxWidth="280"/>
-                    </children>
-                </VBox>
+    <columns>
+        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+        <TableColumn fx:id="colSalle" text="Salle" prefWidth="150"/>
+        <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
+        <TableColumn fx:id="colHeure" text="Horaire" prefWidth="120"/>
+        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+        <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
+    </columns>
+</TableView>
+
             </children>
         </VBox>
     </center>

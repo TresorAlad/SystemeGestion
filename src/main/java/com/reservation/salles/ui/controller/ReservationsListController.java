@@ -44,14 +44,11 @@ public class ReservationsListController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
-            colSalle.setCellValueFactory(cell ->
-                    new SimpleStringProperty(cell.getValue().getSalle().getNom()));
-            colDate.setCellValueFactory(cell ->
-                    new SimpleStringProperty(cell.getValue().getDate().toString()));
+            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));
+            colDate.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
             colHeure.setCellValueFactory(cell -> new SimpleStringProperty(
                     cell.getValue().getHeureDebut() + " - " + cell.getValue().getHeureFin()));
-            colStatut.setCellValueFactory(cell ->
-                    new SimpleStringProperty(cell.getValue().getStatut()));
+            colStatut.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatut()));
 
             // Cellule personnalisée pour afficher un badge coloré selon le statut
             colStatut.setCellFactory(column -> new TableCell<Reservation, String>() {
@@ -103,13 +100,12 @@ public class ReservationsListController {
     }
 
     @FXML
-    private void handleRetour() {
+    private void handleGoDashboard() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user-dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager-dashboard.fxml"));
             Parent root = loader.load();
-            UserDashboardController controller = loader.getController();
+            ManagerDashboardController controller = loader.getController();
             controller.setCurrentUser(currentUser);
-
             Stage stage = (Stage) reservationsTable.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
@@ -120,8 +116,39 @@ public class ReservationsListController {
     }
 
     @FXML
-    private void handleGoDashboard() {
-        handleRetour();
+    private void handleRetour() {
+        handleGoDashboard();
+    }
+
+    @FXML
+    private void handleMesSalles() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager-rooms.fxml"));
+            Parent root = loader.load();
+            ManagerRoomsController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGoToAddSalle() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/salle-form.fxml"));
+            Parent root = loader.load();
+            SalleFormController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
-
