@@ -96,7 +96,8 @@ public class UserDashboardController {
     }
 
     private void rafraichirCartes(List<Salle> salles) {
-        if (sallesFlow == null) return;
+        if (sallesFlow == null)
+            return;
         sallesFlow.getChildren().clear();
         for (Salle salle : salles) {
             sallesFlow.getChildren().add(creerCarteSalle(salle));
@@ -146,8 +147,7 @@ public class UserDashboardController {
         chips.getChildren().addAll(
                 creerChipAvecQuantite("Projecteur"),
                 creerChipAvecQuantite("WiFi"),
-                creerChipAvecQuantite("PC")
-        );
+                creerChipAvecQuantite("PC"));
 
         Button reserverBtn = new Button("Réserver");
         reserverBtn.getStyleClass().add("primary-button");
@@ -188,7 +188,11 @@ public class UserDashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historique.fxml"));
             Parent root = loader.load();
-            ReservationsListController controller = loader.getController();
+            HistoriqueController controller = loader.getController();
+            if (controller == null) {
+                NotificationUtil.erreur("Erreur: Le contrôleur est null.");
+                return;
+            }
             controller.initData(currentUser);
 
             Stage stage = (Stage) sallesFlow.getScene().getWindow();
@@ -197,7 +201,15 @@ public class UserDashboardController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible d'ouvrir la liste des réservations.");
+            String errMsg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            System.err.println("ERREUR DÉTAILLÉE: " + errMsg);
+            // On affiche l'erreur complète pour aider au débogage
+            NotificationUtil.erreur("Impossible d'ouvrir la liste des réservations: " + errMsg
+                    + "\nConsultez la console pour plus de détails.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("EXCEPTION GENERALE: " + e.getClass().getName() + ": " + e.getMessage());
+            NotificationUtil.erreur("Erreur inattendue: " + e.getMessage());
         }
     }
 

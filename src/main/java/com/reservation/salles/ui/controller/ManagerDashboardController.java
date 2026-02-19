@@ -113,6 +113,10 @@ public class ManagerDashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reservations-list.fxml"));
             Parent root = loader.load();
             ReservationsListController controller = loader.getController();
+            if (controller == null) {
+                System.err.println("ERREUR: Le contrôleur ReservationsListController est null");
+                return;
+            }
             controller.initData(currentUser);
 
             Stage stage = (Stage) currentUserLabel.getScene().getWindow();
@@ -121,6 +125,11 @@ public class ManagerDashboardController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
+            String errMsg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            System.err.println("ERREUR DÉTAILLÉE: " + errMsg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("EXCEPTION: " + e.getClass().getName() + ": " + e.getMessage());
         }
     }
 
