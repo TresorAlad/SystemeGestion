@@ -49,7 +49,7 @@ public class HistoriqueController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
-            reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
             colId.setCellValueFactory(
                     cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getIdReservation())));
             colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));

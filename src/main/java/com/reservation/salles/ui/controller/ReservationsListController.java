@@ -22,6 +22,9 @@ import java.io.IOException;
 public class ReservationsListController {
 
     @FXML
+    private Label currentUserLabel;
+
+    @FXML
     private TableView<Reservation> reservationsTable;
     @FXML
     private TableColumn<Reservation, String> colSalle;
@@ -38,6 +41,9 @@ public class ReservationsListController {
 
     public void initData(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
+        if (currentUserLabel != null && utilisateur != null) {
+            currentUserLabel.setText(utilisateur.getNom());
+        }
         chargerReservations();
     }
 
@@ -143,6 +149,20 @@ public class ReservationsListController {
             Parent root = loader.load();
             SalleFormController controller = loader.getController();
             controller.setCurrentUser(currentUser);
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
+            Parent root = loader.load();
             Stage stage = (Stage) reservationsTable.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());

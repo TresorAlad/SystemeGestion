@@ -31,6 +31,8 @@ public class SalleFormController {
     private TextArea descriptionArea;
     @FXML
     private Label photoPathLabel;
+    @FXML
+    private Label currentUserLabel;
 
     private final SalleService salleService = new SalleService();
     private String photoRelativePath;
@@ -38,6 +40,9 @@ public class SalleFormController {
 
     public void setCurrentUser(com.reservation.salles.model.Utilisateur utilisateur) {
         this.currentUser = utilisateur;
+        if (currentUserLabel != null && utilisateur != null) {
+            currentUserLabel.setText(utilisateur.getNom());
+        }
     }
 
     @FXML
@@ -95,6 +100,12 @@ public class SalleFormController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/equipements-form.fxml"));
             Parent root = loader.load();
+
+            EquipementsFormController controller = loader.getController();
+            if (currentUser != null) {
+                controller.setCurrentUser(currentUser);
+            }
+
             Stage stage = (Stage) nomField.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
@@ -150,6 +161,20 @@ public class SalleFormController {
             ManagerRoomsController controller = loader.getController();
             if (currentUser != null)
                 controller.setCurrentUser(currentUser);
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
+            Parent root = loader.load();
             Stage stage = (Stage) nomField.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());

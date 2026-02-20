@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -32,8 +33,18 @@ public class EquipementsFormController {
     private TextField nom4Field;
     @FXML
     private TextField qte4Field;
+    @FXML
+    private Label currentUserLabel;
 
+    private com.reservation.salles.model.Utilisateur currentUser;
     private final EquipementService equipementService = new EquipementService();
+
+    public void setCurrentUser(com.reservation.salles.model.Utilisateur utilisateur) {
+        this.currentUser = utilisateur;
+        if (currentUserLabel != null && utilisateur != null) {
+            currentUserLabel.setText(utilisateur.getNom());
+        }
+    }
 
     @FXML
     private void handleAjouter() {
@@ -75,6 +86,24 @@ public class EquipementsFormController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager-dashboard.fxml"));
             Parent root = loader.load();
+            ManagerDashboardController controller = loader.getController();
+            if (currentUser != null) {
+                controller.setCurrentUser(currentUser);
+            }
+            Stage stage = (Stage) nom1Field.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
+            Parent root = loader.load();
             Stage stage = (Stage) nom1Field.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
@@ -84,4 +113,3 @@ public class EquipementsFormController {
         }
     }
 }
-

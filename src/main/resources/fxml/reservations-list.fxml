@@ -10,11 +10,15 @@
             styleClass="root-pane">
 
     <top>
-        <HBox spacing="16" padding="16,16,16,16" styleClass="top-bar">
+        <HBox spacing="16" styleClass="top-bar">
+            <padding>
+                <Insets topRightBottomLeft="16"/>
+            </padding>
             <children>
-                <Label text="Historique des réservations" styleClass="title-label"/>
+                <Label text="Réservation de Salles" styleClass="title-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button text="Retour" onAction="#handleRetour" styleClass="secondary-button"/>
+                <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
             </children>
         </HBox>
     </top>
