@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +29,8 @@ public class ReservationsListController {
     @FXML
     private TableView<Reservation> reservationsTable;
     @FXML
+    private TableColumn<Reservation, String> colId;
+    @FXML
     private TableColumn<Reservation, String> colSalle;
     @FXML
     private TableColumn<Reservation, String> colDate;
@@ -34,6 +38,8 @@ public class ReservationsListController {
     private TableColumn<Reservation, String> colHeure;
     @FXML
     private TableColumn<Reservation, String> colStatut;
+    @FXML
+    private TableColumn<Reservation, String> colActions;
 
     private Utilisateur currentUser;
     private final ReservationService reservationService = new ReservationService();
@@ -81,12 +87,76 @@ public class ReservationsListController {
                     setGraphic(label);
                 }
             });
+
+            colId.setCellValueFactory(
+                    cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getIdReservation())));
+
+            colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
+                private final Button detailBtn = new Button("Détails");
+                private final Button annulerBtn = new Button("Annuler");
+                private final HBox container = new HBox(8, detailBtn, annulerBtn);
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                        setGraphic(null);
+                        return;
+                    }
+
+                    Reservation r = getTableRow().getItem();
+
+                    detailBtn.getStyleClass().setAll("secondary-button");
+                    detailBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
+                    detailBtn.setOnAction(event -> {
+                        String msg = String.format("Détails de la réservation #%d :\n" +
+                                "Client : %s\n" +
+                                "Salle : %s\n" +
+                                "Date : %s\n" +
+                                "Horaire : %s - %s\n" +
+                                "Statut : %s",
+                                r.getIdReservation(),
+                                r.getUtilisateur() != null ? r.getUtilisateur().getNom() : "Inconnu",
+                                r.getSalle().getNom(),
+                                r.getDate(),
+                                r.getHeureDebut(), r.getHeureFin(),
+                                r.getStatut());
+                        NotificationUtil.info(msg);
+                    });
+
+                    annulerBtn.getStyleClass().setAll("danger-button");
+                    annulerBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
+                    annulerBtn.setOnAction(event -> {
+                        if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
+                            reservationService.annulerReservation(r);
+                            NotificationUtil.info("Réservation annulée.");
+                            chargerReservations();
+                        } else {
+                            NotificationUtil.info("Cette réservation ne peut plus être annulée.");
+                        }
+                    });
+
+                    if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
+                        annulerBtn.setVisible(true);
+                    } else {
+                        annulerBtn.setVisible(false);
+                    }
+
+                    setGraphic(container);
+                }
+            });
             reservationsTable.setItems(reservations);
         }
     }
 
     private void chargerReservations() {
-        reservations.setAll(reservationService.listerParUtilisateur(currentUser.getIdUtilisateur()));
+        if (currentUser != null) {
+            if (currentUser.estGestionnaire()) {
+                reservations.setAll(reservationService.listerToutesLesReservations());
+            } else {
+                reservations.setAll(reservationService.listerParUtilisateur(currentUser.getIdUtilisateur()));
+            }
+        }
     }
 
     @FXML

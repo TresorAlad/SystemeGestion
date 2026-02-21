@@ -12,7 +12,7 @@
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
-                <Insets topRightBottomLeft="16"/>
+                <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
             <children>
                 <Label text="Réservation de Salles" styleClass="title-label"/>
@@ -24,7 +24,10 @@
     </top>
 
     <center>
-        <VBox spacing="24" padding="24,24,24,24">
+        <VBox spacing="24">
+            <padding>
+                <Insets top="24" right="24" bottom="24" left="24"/>
+            </padding>
             <children>
 
                 <!-- nav comme sur le dashboard -->
@@ -48,21 +51,18 @@
                     </children>
                 </HBox>
 
-                <VBox spacing="12" styleClass="card">
+                <VBox spacing="12" styleClass="card" VBox.vgrow="ALWAYS">
                     <children>
-                        <TableView fx:id="reservationsTable" prefHeight="360">
+                        <TableView fx:id="reservationsTable" prefHeight="360" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colSalle" text="Salle" prefWidth="220"/>
-                                <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
-                                <TableColumn fx:id="colHeure" text="Horaire" prefWidth="180"/>
-                                <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                                <TableColumn fx:id="colSalle" text="Salle" prefWidth="180"/>
+                                <TableColumn fx:id="colDate" text="Date" prefWidth="110"/>
+                                <TableColumn fx:id="colHeure" text="Horaire" prefWidth="160"/>
+                                <TableColumn fx:id="colStatut" text="Statut" prefWidth="110"/>
+                                <TableColumn fx:id="colActions" text="Actions" prefWidth="240"/>
                             </columns>
                         </TableView>
-
-                        <Button text="Annuler la réservation sélectionnée"
-                                onAction="#handleAnnuler"
-                                styleClass="danger-button"
-                                maxWidth="280"/>
                     </children>
                 </VBox>
             </children>

@@ -12,8 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -38,6 +41,8 @@ public class ManagerDashboardController {
     private TableColumn<Reservation, String> colHeure;
     @FXML
     private TableColumn<Reservation, String> colStatut;
+    @FXML
+    private TableColumn<Reservation, Void> colActions;
 
     private Utilisateur currentUser;
     private final ReservationService reservationService = new ReservationService();
@@ -58,8 +63,80 @@ public class ManagerDashboardController {
             colHeure.setCellValueFactory(cell -> new SimpleStringProperty(
                     cell.getValue().getHeureDebut() + " - " + cell.getValue().getHeureFin()));
             colStatut.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatut()));
+
+            configurerStatut();
+            configurerActions();
+
             recentesTable.setItems(reservationsRecentes);
         }
+    }
+
+    private void configurerStatut() {
+        colStatut.setCellFactory(column -> new TableCell<>() {
+            private final Label label = new Label();
+
+            @Override
+            protected void updateItem(String statut, boolean empty) {
+                super.updateItem(statut, empty);
+                if (empty || statut == null) {
+                    setGraphic(null);
+                } else {
+                    label.getStyleClass().setAll("status-chip");
+                    String upper = statut.toUpperCase();
+                    if ("VALIDEE".equals(upper) || "CONFIRMEE".equals(upper)) {
+                        label.getStyleClass().add("status-chip-success");
+                    } else if ("EN_ATTENTE".equals(upper)) {
+                        label.getStyleClass().add("status-chip-pending");
+                    } else if ("REJETEE".equals(upper) || "ANNULEE".equals(upper)) {
+                        label.getStyleClass().add("status-chip-danger");
+                    }
+                    label.setText(upper);
+                    setGraphic(label);
+                }
+            }
+        });
+    }
+
+    private void configurerActions() {
+        colActions.setCellFactory(param -> new TableCell<>() {
+            private final Button btnValider = new Button("Accepter");
+            private final Button btnRejeter = new Button("Rejeter");
+            private final HBox container = new HBox(8, btnValider, btnRejeter);
+
+            {
+                btnValider.getStyleClass().add("primary-button");
+                btnRejeter.getStyleClass().add("danger-button");
+
+                btnValider.setOnAction(event -> {
+                    Reservation r = getTableView().getItems().get(getIndex());
+                    reservationService.validerReservation(r);
+                    recentesTable.refresh();
+                    chargerDashboard();
+                });
+
+                btnRejeter.setOnAction(event -> {
+                    Reservation r = getTableView().getItems().get(getIndex());
+                    reservationService.rejeterReservation(r);
+                    recentesTable.refresh();
+                    chargerDashboard();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    Reservation r = getTableView().getItems().get(getIndex());
+                    if ("EN_ATTENTE".equals(r.getStatut())) {
+                        setGraphic(container);
+                    } else {
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
     }
 
     private void chargerDashboard() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,7 +10,10 @@
             styleClass="root-pane">
 
     <top>
-        <HBox spacing="16" padding="16,16,16,16" styleClass="top-bar">
+        <HBox spacing="16" styleClass="top-bar">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
             <children>
                 <Label text="Réservation de Salles" styleClass="title-label"/>
             </children>

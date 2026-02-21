@@ -16,6 +16,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -89,7 +90,9 @@ public class HistoriqueController {
 
             // Colonne Actions avec boutons
             colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
+                private final Button detailBtn = new Button("Détails");
                 private final Button annulerBtn = new Button("Annuler");
+                private final HBox container = new HBox(8, detailBtn, annulerBtn);
 
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -99,11 +102,31 @@ public class HistoriqueController {
                         return;
                     }
 
-                    Reservation reservation = getTableRow().getItem();
+                    Reservation r = getTableRow().getItem();
+
+                    detailBtn.getStyleClass().setAll("secondary-button");
+                    detailBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
+                    detailBtn.setOnAction(event -> {
+                        String msg = String.format("Détails de la réservation #%d :\n" +
+                                "Client : %s\n" +
+                                "Salle : %s\n" +
+                                "Date : %s\n" +
+                                "Horaire : %s - %s\n" +
+                                "Statut : %s",
+                                r.getIdReservation(),
+                                r.getUtilisateur().getNom(),
+                                r.getSalle().getNom(),
+                                r.getDate(),
+                                r.getHeureDebut(), r.getHeureFin(),
+                                r.getStatut());
+                        NotificationUtil.info(msg);
+                    });
+
+                    annulerBtn.getStyleClass().setAll("danger-button");
                     annulerBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
                     annulerBtn.setOnAction(event -> {
-                        if ("VALIDEE".equals(reservation.getStatut()) || "EN_ATTENTE".equals(reservation.getStatut())) {
-                            reservationService.annulerReservation(reservation);
+                        if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
+                            reservationService.annulerReservation(r);
                             NotificationUtil.info("Réservation annulée.");
                             chargerReservations();
                         } else {
@@ -111,13 +134,14 @@ public class HistoriqueController {
                         }
                     });
 
-                    if ("VALIDEE".equals(reservation.getStatut()) || "EN_ATTENTE".equals(reservation.getStatut())) {
-                        annulerBtn.setStyle(
-                                "-fx-padding: 4 12 4 12; -fx-font-size: 11px; -fx-background-color: #f87171;");
-                        setGraphic(annulerBtn);
+                    // On n'affiche le bouton annuler que si c'est possible
+                    if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
+                        annulerBtn.setVisible(true);
                     } else {
-                        setGraphic(null);
+                        annulerBtn.setVisible(false);
                     }
+
+                    setGraphic(container);
                 }
             });
 
@@ -128,7 +152,11 @@ public class HistoriqueController {
     private void chargerReservations() {
         if (currentUser != null) {
             try {
-                reservations.setAll(reservationService.listerParUtilisateur(currentUser.getIdUtilisateur()));
+                if (currentUser.estGestionnaire()) {
+                    reservations.setAll(reservationService.listerToutesLesReservations());
+                } else {
+                    reservations.setAll(reservationService.listerParUtilisateur(currentUser.getIdUtilisateur()));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 NotificationUtil.erreur("Erreur lors du chargement des réservations: " + e.getMessage());

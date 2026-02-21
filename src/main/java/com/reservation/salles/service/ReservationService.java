@@ -17,7 +17,7 @@ public class ReservationService {
     private final DemandeDAO demandeDAO = new DemandeDAO();
 
     public Reservation creerReservation(Utilisateur utilisateur, Salle salle,
-                                        LocalDate date, LocalTime debut, LocalTime fin) {
+            LocalDate date, LocalTime debut, LocalTime fin) {
         if (!reservationDAO.isSalleDisponible(salle.getIdSalle(), date, debut, fin)) {
             return null;
         }
@@ -40,6 +40,20 @@ public class ReservationService {
         reservationDAO.updateStatut(reservation.getIdReservation(), "ANNULEE");
     }
 
+    public void validerReservation(Reservation reservation) {
+        reservation.setStatut("VALIDEE");
+        reservationDAO.updateStatut(reservation.getIdReservation(), "VALIDEE");
+    }
+
+    public void rejeterReservation(Reservation reservation) {
+        reservation.setStatut("REJETEE");
+        reservationDAO.updateStatut(reservation.getIdReservation(), "REJETEE");
+    }
+
+    public List<Reservation> listerToutesLesReservations() {
+        return reservationDAO.findAll();
+    }
+
     public List<Reservation> listerParUtilisateur(int idUtilisateur) {
         return reservationDAO.findByUtilisateur(idUtilisateur);
     }
@@ -52,4 +66,3 @@ public class ReservationService {
         return reservationDAO.countByStatut("VALIDEE");
     }
 }
-
