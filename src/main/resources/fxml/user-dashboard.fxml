@@ -32,7 +32,7 @@
             <children>
 
                 <!-- barre d'onglets -->
-                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button fx:id="btnDashboard"
                                 text="Tableau de bord"
@@ -51,7 +51,7 @@
                 </HBox>
 
                 <!-- barre de recherche -->
-                <HBox alignment="CENTER_LEFT">
+                <HBox alignment="CENTER">
                     <children>
                         <TextField fx:id="searchField" promptText="Rechercher une salle"
                                    styleClass="search-field" HBox.hgrow="ALWAYS"/>
@@ -60,7 +60,7 @@
 
                 <!-- titre + compteur -->
                 <Label fx:id="totalSallesLabel" text="Toutes mes salles"
-                       styleClass="section-title"/>
+                       styleClass="section-title" alignment="CENTER" maxWidth="Infinity"/>
 
                 <!-- grille de cartes de salles -->
                 <ScrollPane fitToWidth="true" prefViewportHeight="360"

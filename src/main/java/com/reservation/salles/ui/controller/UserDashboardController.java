@@ -144,6 +144,7 @@ public class UserDashboardController {
         capaLabel.getStyleClass().add("room-meta");
 
         HBox chips = new HBox(6);
+        chips.setAlignment(Pos.CENTER);
         chips.getChildren().addAll(
                 creerChipAvecQuantite("Projecteur"),
                 creerChipAvecQuantite("WiFi"),
