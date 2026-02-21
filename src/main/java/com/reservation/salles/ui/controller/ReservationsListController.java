@@ -56,11 +56,28 @@ public class ReservationsListController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
-            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));
-            colDate.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+            if (colId != null) {
+                colId.setCellValueFactory(cell -> new SimpleStringProperty(
+                        cell.getValue() != null ? String.valueOf(cell.getValue().getIdReservation()) : ""));
+            }
+            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getSalle() != null)
+                            ? cell.getValue().getSalle().getNom()
+                            : "N/A"));
+            colDate.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getDate() != null)
+                            ? cell.getValue().getDate().toString()
+                            : ""));
             colHeure.setCellValueFactory(cell -> new SimpleStringProperty(
-                    cell.getValue().getHeureDebut() + " - " + cell.getValue().getHeureFin()));
-            colStatut.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatut()));
+                    (cell.getValue() != null && cell.getValue().getHeureDebut() != null
+                            ? cell.getValue().getHeureDebut()
+                            : "") + " - " +
+                            (cell.getValue() != null && cell.getValue().getHeureFin() != null
+                                    ? cell.getValue().getHeureFin()
+                                    : "")));
+            colStatut.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getStatut() != null) ? cell.getValue().getStatut()
+                            : ""));
 
             // Cellule personnalisée pour afficher un badge coloré selon le statut
             colStatut.setCellFactory(column -> new TableCell<Reservation, String>() {
@@ -176,24 +193,36 @@ public class ReservationsListController {
     }
 
     @FXML
-    private void handleGoDashboard() {
+    private void handleRetour() {
+        if (currentUser == null)
+            return;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager-dashboard.fxml"));
+            String fxmlFile = currentUser.estGestionnaire() ? "/fxml/manager-dashboard.fxml"
+                    : "/fxml/user-dashboard.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
-            ManagerDashboardController controller = loader.getController();
-            controller.setCurrentUser(currentUser);
+
+            if (currentUser.estGestionnaire()) {
+                ManagerDashboardController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+            } else {
+                UserDashboardController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+            }
+
             Stage stage = (Stage) reservationsTable.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
+            NotificationUtil.erreur("Erreur lors du retour au tableau de bord.");
         }
     }
 
     @FXML
-    private void handleRetour() {
-        handleGoDashboard();
+    private void handleGoDashboard() {
+        handleRetour();
     }
 
     @FXML
@@ -219,6 +248,23 @@ public class ReservationsListController {
             Parent root = loader.load();
             SalleFormController controller = loader.getController();
             controller.setCurrentUser(currentUser);
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            ProfilController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
             Stage stage = (Stage) reservationsTable.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());

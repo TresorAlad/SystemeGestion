@@ -14,7 +14,7 @@ public class UtilisateurDAO {
     public Utilisateur findByEmail(String email) {
         String sql = "SELECT * FROM utilisateurs WHERE email = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
@@ -31,7 +31,7 @@ public class UtilisateurDAO {
     public Utilisateur findByEmailAndPassword(String email, String password) {
         String sql = "SELECT * FROM utilisateurs WHERE email = ? AND mot_de_passe = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
             ps.setString(2, password);
@@ -49,7 +49,7 @@ public class UtilisateurDAO {
     public Utilisateur findById(int id) {
         String sql = "SELECT * FROM utilisateurs WHERE id_utilisateur = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -66,7 +66,7 @@ public class UtilisateurDAO {
     public Utilisateur save(Utilisateur u) {
         String sql = "INSERT INTO utilisateurs (nom, email, mot_de_passe, role) VALUES (?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, u.getNom());
             ps.setString(2, u.getEmail());
@@ -85,6 +85,46 @@ public class UtilisateurDAO {
         return u;
     }
 
+    public java.util.List<Utilisateur> findAll() {
+        java.util.List<Utilisateur> list = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM utilisateurs ORDER BY nom";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(map(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void updateRole(int id, String role) {
+        String sql = "UPDATE utilisateurs SET role = ? WHERE id_utilisateur = ?";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, role);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateProfile(int id, String nom, String motDePasse) {
+        String sql = "UPDATE utilisateurs SET nom = ?, mot_de_passe = ? WHERE id_utilisateur = ?";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nom);
+            ps.setString(2, motDePasse);
+            ps.setInt(3, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Utilisateur map(ResultSet rs) throws SQLException {
         Utilisateur u = new Utilisateur();
         u.setIdUtilisateur(rs.getInt("id_utilisateur"));
@@ -95,4 +135,3 @@ public class UtilisateurDAO {
         return u;
     }
 }
-

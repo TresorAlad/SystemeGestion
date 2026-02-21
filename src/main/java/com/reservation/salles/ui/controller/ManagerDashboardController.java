@@ -58,11 +58,24 @@ public class ManagerDashboardController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
-            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));
-            colDate.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getSalle() != null)
+                            ? cell.getValue().getSalle().getNom()
+                            : "N/A"));
+            colDate.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getDate() != null)
+                            ? cell.getValue().getDate().toString()
+                            : ""));
             colHeure.setCellValueFactory(cell -> new SimpleStringProperty(
-                    cell.getValue().getHeureDebut() + " - " + cell.getValue().getHeureFin()));
-            colStatut.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatut()));
+                    (cell.getValue() != null && cell.getValue().getHeureDebut() != null
+                            ? cell.getValue().getHeureDebut()
+                            : "") + " - " +
+                            (cell.getValue() != null && cell.getValue().getHeureFin() != null
+                                    ? cell.getValue().getHeureFin()
+                                    : "")));
+            colStatut.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getStatut() != null) ? cell.getValue().getStatut()
+                            : ""));
 
             configurerStatut();
             configurerActions();
@@ -151,6 +164,23 @@ public class ManagerDashboardController {
         }
         // réservations récentes
         reservationsRecentes.setAll(reservationService.listerRecentes(10));
+    }
+
+    @FXML
+    private void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            ProfilController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) currentUserLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

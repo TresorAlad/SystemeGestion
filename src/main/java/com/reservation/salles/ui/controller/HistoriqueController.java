@@ -18,10 +18,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class HistoriqueController {
+
+    @FXML
+    private Label currentUserLabel;
 
     @FXML
     private TableView<Reservation> reservationsTable;
@@ -44,6 +46,9 @@ public class HistoriqueController {
 
     public void initData(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
+        if (currentUserLabel != null && utilisateur != null) {
+            currentUserLabel.setText(utilisateur.getNom());
+        }
         chargerReservations();
     }
 
@@ -52,15 +57,26 @@ public class HistoriqueController {
         if (colSalle != null) {
             reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
             colId.setCellValueFactory(
-                    cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getIdReservation())));
-            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSalle().getNom()));
+                    cell -> new SimpleStringProperty(
+                            cell.getValue() != null ? String.valueOf(cell.getValue().getIdReservation()) : ""));
+            colSalle.setCellValueFactory(cell -> new SimpleStringProperty(
+                    (cell.getValue() != null && cell.getValue().getSalle() != null)
+                            ? cell.getValue().getSalle().getNom()
+                            : "N/A"));
             colDate.setCellValueFactory(cell -> new SimpleStringProperty(
-                    cell.getValue().getDate() != null ? cell.getValue().getDate().toString() : ""));
+                    (cell.getValue() != null && cell.getValue().getDate() != null)
+                            ? cell.getValue().getDate().toString()
+                            : ""));
             colHeure.setCellValueFactory(cell -> new SimpleStringProperty(
-                    (cell.getValue().getHeureDebut() != null ? cell.getValue().getHeureDebut() : "") + " - " +
-                            (cell.getValue().getHeureFin() != null ? cell.getValue().getHeureFin() : "")));
+                    (cell.getValue() != null && cell.getValue().getHeureDebut() != null
+                            ? cell.getValue().getHeureDebut()
+                            : "") + " - " +
+                            (cell.getValue() != null && cell.getValue().getHeureFin() != null
+                                    ? cell.getValue().getHeureFin()
+                                    : "")));
             colStatut.setCellValueFactory(cell -> new SimpleStringProperty(
-                    cell.getValue().getStatut() != null ? cell.getValue().getStatut() : ""));
+                    (cell.getValue() != null && cell.getValue().getStatut() != null) ? cell.getValue().getStatut()
+                            : ""));
 
             // Cellule personnalisée pour afficher un badge coloré selon le statut
             colStatut.setCellFactory(column -> new TableCell<Reservation, String>() {
@@ -114,11 +130,12 @@ public class HistoriqueController {
                                 "Horaire : %s - %s\n" +
                                 "Statut : %s",
                                 r.getIdReservation(),
-                                r.getUtilisateur().getNom(),
-                                r.getSalle().getNom(),
-                                r.getDate(),
-                                r.getHeureDebut(), r.getHeureFin(),
-                                r.getStatut());
+                                r.getUtilisateur() != null ? r.getUtilisateur().getNom() : "Inconnu",
+                                r.getSalle() != null ? r.getSalle().getNom() : "Inconnue",
+                                r.getDate() != null ? r.getDate() : "Non définie",
+                                r.getHeureDebut() != null ? r.getHeureDebut() : "?",
+                                r.getHeureFin() != null ? r.getHeureFin() : "?",
+                                r.getStatut() != null ? r.getStatut() : "Inconnu");
                         NotificationUtil.info(msg);
                     });
 
@@ -181,11 +198,11 @@ public class HistoriqueController {
     }
 
     @FXML
-    private void handleRetour() {
+    private void handleProfile() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user-dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
             Parent root = loader.load();
-            UserDashboardController controller = loader.getController();
+            ProfilController controller = loader.getController();
             controller.setCurrentUser(currentUser);
 
             Stage stage = (Stage) reservationsTable.getScene().getWindow();
@@ -198,7 +215,49 @@ public class HistoriqueController {
     }
 
     @FXML
+    private void handleRetour() {
+        if (currentUser == null)
+            return;
+        try {
+            String fxmlFile = currentUser.estGestionnaire() ? "/fxml/manager-dashboard.fxml"
+                    : "/fxml/user-dashboard.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+
+            if (currentUser.estGestionnaire()) {
+                ManagerDashboardController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+            } else {
+                UserDashboardController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+            }
+
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            NotificationUtil.erreur("Erreur lors du retour au tableau de bord.");
+        }
+    }
+
+    @FXML
     private void handleGoDashboard() {
         handleRetour();
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

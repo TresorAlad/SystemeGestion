@@ -22,6 +22,8 @@ import java.time.format.DateTimeParseException;
 public class ReservationFormController {
 
     @FXML
+    private Label currentUserLabel;
+    @FXML
     private Label salleLabel;
     @FXML
     private DatePicker datePicker;
@@ -39,6 +41,9 @@ public class ReservationFormController {
         this.currentUser = utilisateur;
         this.salle = salle;
         this.salleLabel.setText(salle.getNom());
+        if (currentUserLabel != null && utilisateur != null) {
+            currentUserLabel.setText(utilisateur.getNom());
+        }
     }
 
     @FXML
@@ -113,5 +118,35 @@ public class ReservationFormController {
             e.printStackTrace();
         }
     }
-}
 
+    @FXML
+    private void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            ProfilController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) salleLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) salleLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -171,6 +171,23 @@ public class SalleFormController {
     }
 
     @FXML
+    private void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            ProfilController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleLogout() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login-view.fxml"));
