@@ -21,8 +21,15 @@ public class SalleService {
         return salleDAO.save(salle);
     }
 
+    public boolean modifierSalle(Salle salle) {
+        return salleDAO.update(salle);
+    }
+
+    public boolean supprimerSalle(int id) {
+        return salleDAO.delete(id);
+    }
+
     public int compterDisponibles() {
         return salleDAO.countDisponibles();
     }
 }
-

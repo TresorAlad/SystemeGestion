@@ -6,7 +6,7 @@
 
 <BorderPane fx:controller="com.reservation.salles.ui.controller.ManagerRoomsController"
             xmlns:fx="http://javafx.com/fxml"
-            prefWidth="960" prefHeight="540"
+            prefWidth="960" prefHeight="600"
             styleClass="root-pane">
 
     <top>
@@ -34,38 +34,50 @@
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="80"
                                 styleClass="btn-outline"
                                 onAction="#handleGoDashboard"/>
                         <Button text="Historique des réservations"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="80"
                                 styleClass="btn-outline"
                                 onAction="#handleMesReservations"/>
                         <Button text="Mes salles"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="80"
                                 styleClass="btn-dashboard"/>
                         <Button text="Ajouter Salle"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="80"
                                 styleClass="btn-outline"
                                 onAction="#handleGoToAddSalle"/>
                     </children>
                 </HBox>
 
-                <VBox spacing="12" styleClass="card">
+                <VBox spacing="16" styleClass="card">
                     <children>
-                        <Label text="Mes salles" styleClass="section-title"/>
-                        <TableView fx:id="sallesTable" prefHeight="360">
-                            <columns>
-                                <TableColumn fx:id="colNom" text="Nom" prefWidth="220"/>
-                                <TableColumn fx:id="colType" text="Type" prefWidth="160"/>
-                                <TableColumn fx:id="colCapacite" text="Capacité" prefWidth="120"/>
-                                <TableColumn fx:id="colDisponible" text="Disponible" prefWidth="120"/>
-                            </columns>
-                        </TableView>
+                        <!-- En-tête avec titre + recherche -->
+                        <HBox spacing="16" alignment="CENTER_LEFT">
+                            <children>
+                                <Label fx:id="totalSallesLabel" text="Mes salles" styleClass="section-title"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="searchField"
+                                           promptText="🔍 Rechercher une salle..."
+                                           styleClass="search-field"
+                                           prefWidth="280"/>
+                            </children>
+                        </HBox>
+
+                        <!-- Grille de cartes identique au user dashboard -->
+                        <ScrollPane fitToWidth="true" prefViewportHeight="400"
+                                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                            <content>
+                                <FlowPane fx:id="sallesFlow" hgap="24" vgap="24"
+                                          prefWrapLength="880"
+                                          styleClass="rooms-flow"/>
+                            </content>
+                        </ScrollPane>
                     </children>
                 </VBox>
+
             </children>
         </VBox>
     </center>
 </BorderPane>
-

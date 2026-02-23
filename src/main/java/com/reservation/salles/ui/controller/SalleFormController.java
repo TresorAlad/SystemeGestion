@@ -37,6 +37,20 @@ public class SalleFormController {
     private final SalleService salleService = new SalleService();
     private String photoRelativePath;
     private com.reservation.salles.model.Utilisateur currentUser;
+    private Salle salleAmodifier;
+
+    public void setSalle(Salle salle) {
+        this.salleAmodifier = salle;
+        if (salle != null) {
+            nomField.setText(salle.getNom());
+            typeField.setText(salle.getType());
+            capaciteField.setText(String.valueOf(salle.getCapacite()));
+            photoRelativePath = salle.getPhoto();
+            if (photoPathLabel != null && photoRelativePath != null) {
+                photoPathLabel.setText(photoRelativePath);
+            }
+        }
+    }
 
     public void setCurrentUser(com.reservation.salles.model.Utilisateur utilisateur) {
         this.currentUser = utilisateur;
@@ -91,10 +105,19 @@ public class SalleFormController {
             return;
         }
 
-        Salle salle = new Salle(0, nom, type, capacite, true);
-        salle.setPhoto(photoRelativePath != null ? photoRelativePath : "jav.jpg");
-        salleService.ajouterSalle(salle);
-        NotificationUtil.succes("Salle créée.");
+        if (salleAmodifier == null) {
+            Salle salle = new Salle(0, nom, type, capacite, true);
+            salle.setPhoto(photoRelativePath != null ? photoRelativePath : "jav.jpg");
+            salleService.ajouterSalle(salle);
+            NotificationUtil.succes("Salle créée.");
+        } else {
+            salleAmodifier.setNom(nom);
+            salleAmodifier.setType(type);
+            salleAmodifier.setCapacite(capacite);
+            salleAmodifier.setPhoto(photoRelativePath != null ? photoRelativePath : "jav.jpg");
+            salleService.modifierSalle(salleAmodifier);
+            NotificationUtil.succes("Salle modifiée.");
+        }
 
         // Aller vers l'écran d'équipements
         try {

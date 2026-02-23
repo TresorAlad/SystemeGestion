@@ -22,15 +22,20 @@ public class ReservationService {
             return null;
         }
 
-        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, "EN_ATTENTE");
+        boolean isManager = utilisateur.estGestionnaire();
+        String statut = isManager ? "VALIDEE" : "EN_ATTENTE";
+
+        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, statut);
         reservationDAO.save(reservation);
 
-        Demande demande = new Demande();
-        demande.setReservation(reservation);
-        demande.setTypeDemande("CREATION");
-        demande.setDateDemande(LocalDate.now());
-        demande.setStatut("EN_ATTENTE");
-        demandeDAO.save(demande);
+        if (!isManager) {
+            Demande demande = new Demande();
+            demande.setReservation(reservation);
+            demande.setTypeDemande("CREATION");
+            demande.setDateDemande(LocalDate.now());
+            demande.setStatut("EN_ATTENTE");
+            demandeDAO.save(demande);
+        }
 
         return reservation;
     }
