@@ -11,7 +11,7 @@ public class Reservation {
     private LocalDate date;
     private LocalTime heureDebut;
     private LocalTime heureFin;
-    private String statut; // EN_ATTENTE, VALIDEE, REJETEE, ANNULEE
+    private String statut;
 
     public Reservation() {
     }
@@ -92,4 +92,3 @@ public class Reservation {
         this.statut = "ANNULEE";
     }
 }
-

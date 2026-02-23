@@ -24,7 +24,7 @@ public class ReservationDAO {
         String sql = "INSERT INTO reservations (id_utilisateur, id_salle, date, heure_debut, heure_fin, statut) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, r.getUtilisateur().getIdUtilisateur());
             ps.setInt(2, r.getSalle().getIdSalle());
@@ -48,7 +48,7 @@ public class ReservationDAO {
     public void updateStatut(int idReservation, String statut) {
         String sql = "UPDATE reservations SET statut = ? WHERE id_reservation = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, statut);
             ps.setInt(2, idReservation);
@@ -58,11 +58,27 @@ public class ReservationDAO {
         }
     }
 
+    public List<Reservation> findAll() {
+        List<Reservation> result = new ArrayList<>();
+        String sql = "SELECT * FROM reservations ORDER BY date DESC, heure_debut DESC";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    result.add(map(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public List<Reservation> findByUtilisateur(int idUtilisateur) {
         List<Reservation> result = new ArrayList<>();
         String sql = "SELECT * FROM reservations WHERE id_utilisateur = ? ORDER BY date, heure_debut";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idUtilisateur);
             try (ResultSet rs = ps.executeQuery()) {
@@ -77,17 +93,16 @@ public class ReservationDAO {
     }
 
     public boolean isSalleDisponible(int idSalle, LocalDate date,
-                                     LocalTime heureDebut, LocalTime heureFin) {
-        String sql =
-                "SELECT COUNT(*) FROM reservations " +
-                        "WHERE id_salle = ? AND date = ? " +
-                        "AND statut IN ('EN_ATTENTE','VALIDEE') " +
-                        "AND ( (heure_debut < ? AND heure_fin > ?) " +
-                        "   OR (heure_debut >= ? AND heure_debut < ?) " +
-                        "   OR (heure_fin > ? AND heure_fin <= ?) )";
+            LocalTime heureDebut, LocalTime heureFin) {
+        String sql = "SELECT COUNT(*) FROM reservations " +
+                "WHERE id_salle = ? AND date = ? " +
+                "AND statut IN ('EN_ATTENTE','VALIDEE') " +
+                "AND ( (heure_debut < ? AND heure_fin > ?) " +
+                "   OR (heure_debut >= ? AND heure_debut < ?) " +
+                "   OR (heure_fin > ? AND heure_fin <= ?) )";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idSalle);
             ps.setString(2, date.toString());
@@ -112,7 +127,7 @@ public class ReservationDAO {
     public Reservation findById(int idReservation) {
         String sql = "SELECT * FROM reservations WHERE id_reservation = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idReservation);
             try (ResultSet rs = ps.executeQuery()) {
@@ -130,7 +145,7 @@ public class ReservationDAO {
         List<Reservation> result = new ArrayList<>();
         String sql = "SELECT * FROM reservations ORDER BY date DESC, heure_debut DESC LIMIT ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, limit);
             try (ResultSet rs = ps.executeQuery()) {
@@ -147,7 +162,7 @@ public class ReservationDAO {
     public int countByStatut(String statut) {
         String sql = "SELECT COUNT(*) FROM reservations WHERE statut = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, statut);
             try (ResultSet rs = ps.executeQuery()) {
@@ -176,4 +191,3 @@ public class ReservationDAO {
         return new Reservation(idReservation, u, s, date, debut, fin, statut);
     }
 }
-

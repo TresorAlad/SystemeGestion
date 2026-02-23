@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="com.reservation.salles.ui.controller.HistoriqueController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="960" prefHeight="540"
+            styleClass="root-pane">
+
+    <top>
+        <HBox spacing="16" styleClass="top-bar">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <children>
+                <Label text="Historique des réservations" styleClass="title-label"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Profil" onAction="#handleProfile" styleClass="secondary-button"/>
+                <Button text="Retour" onAction="#handleRetour" styleClass="secondary-button"/>
+                <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="24">
+            <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+            <children>
+
+                <!-- onglets (même style que user-dashboard) -->
+                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                    <children>
+                        <Button text="Tableau de bord"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoDashboard"/>
+
+                        <Button text="Historique de réservation"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-dashboard"/>
+                    </children>
+                </HBox>
+
+                <TableView fx:id="reservationsTable"
+           prefHeight="360"
+           styleClass="modern-table">
+
+    <columns>
+        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+        <TableColumn fx:id="colSalle" text="Salle" prefWidth="150"/>
+        <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
+        <TableColumn fx:id="colHeure" text="Horaire" prefWidth="120"/>
+        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+        <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
+    </columns>
+</TableView>
+
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
+

@@ -12,12 +12,13 @@
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
-                <Insets topRightBottomLeft="16"/>
+                <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
             <children>
                 <Label text="Réservation de Salles" styleClass="title-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
                 <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Profil" onAction="#handleProfile" styleClass="secondary-button"/>
                 <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
             </children>
         </HBox>
@@ -26,22 +27,31 @@
     <center>
         <VBox spacing="24">
             <padding>
-                <Insets topRightBottomLeft="24"/>
+                <Insets top="24" right="24" bottom="24" left="24"/>
             </padding>
             <children>
 
                 <!-- barre d'onglets -->
-                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
-                        <Button text="Tableau de bord"
-                                styleClass="nav-pill nav-pill-active"/>
-                        <Button text="Historique des réservations" onAction="#handleMesReservations"
-                                styleClass="nav-pill"/>
+                        <Button fx:id="btnDashboard"
+                                text="Tableau de bord"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-dashboard"
+                                onAction="#goToDashboard"/>
+
+                        <Button fx:id="btnHistorique"
+                                text="Historique de réservation"
+                                prefWidth="260"
+                                prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#goToHistorique"/>
                     </children>
                 </HBox>
 
                 <!-- barre de recherche -->
-                <HBox alignment="CENTER_LEFT">
+                <HBox alignment="CENTER">
                     <children>
                         <TextField fx:id="searchField" promptText="Rechercher une salle"
                                    styleClass="search-field" HBox.hgrow="ALWAYS"/>
@@ -50,7 +60,7 @@
 
                 <!-- titre + compteur -->
                 <Label fx:id="totalSallesLabel" text="Toutes mes salles"
-                       styleClass="section-title"/>
+                       styleClass="section-title" alignment="CENTER" maxWidth="Infinity"/>
 
                 <!-- grille de cartes de salles -->
                 <ScrollPane fitToWidth="true" prefViewportHeight="360"

@@ -10,44 +10,60 @@
             styleClass="root-pane">
 
     <top>
-        <HBox spacing="16" padding="16" styleClass="top-bar">
+        <HBox spacing="16" styleClass="top-bar">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
             <children>
-                <Label text="Historique des réservations" styleClass="title-label"/>
+                <Label text="Réservation de Salles" styleClass="title-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button text="Retour" onAction="#handleRetour" styleClass="secondary-button"/>
+                <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Profil" onAction="#handleProfile" styleClass="secondary-button"/>
+                <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
             </children>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="24" padding="24">
+        <VBox spacing="24">
+            <padding>
+                <Insets top="24" right="24" bottom="24" left="24"/>
+            </padding>
             <children>
 
                 <!-- nav comme sur le dashboard -->
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
-                        <Button text="Tableau de bord" onAction="#handleGoDashboard"
-                                styleClass="nav-pill"/>
+                        <Button text="Tableau de bord"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoDashboard"/>
                         <Button text="Historique des réservations"
-                                styleClass="nav-pill nav-pill-active"/>
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-dashboard"/>
+                        <Button text="Mes salles"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleMesSalles"/>
+                        <Button text="Ajouter Salle"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoToAddSalle"/>
                     </children>
                 </HBox>
 
-                <VBox spacing="12" styleClass="card">
+                <VBox spacing="12" styleClass="card" VBox.vgrow="ALWAYS">
                     <children>
-                        <TableView fx:id="reservationsTable" prefHeight="360">
+                        <TableView fx:id="reservationsTable" prefHeight="360" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colSalle" text="Salle" prefWidth="220"/>
-                                <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
-                                <TableColumn fx:id="colHeure" text="Horaire" prefWidth="180"/>
-                                <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                                <TableColumn fx:id="colSalle" text="Salle" prefWidth="180"/>
+                                <TableColumn fx:id="colDate" text="Date" prefWidth="110"/>
+                                <TableColumn fx:id="colHeure" text="Horaire" prefWidth="160"/>
+                                <TableColumn fx:id="colStatut" text="Statut" prefWidth="110"/>
+                                <TableColumn fx:id="colActions" text="Actions" prefWidth="240"/>
                             </columns>
                         </TableView>
-
-                        <Button text="Annuler la réservation sélectionnée"
-                                onAction="#handleAnnuler"
-                                styleClass="danger-button"
-                                maxWidth="280"/>
                     </children>
                 </VBox>
             </children>

@@ -52,8 +52,8 @@ mvn javafx:run
 
 | Rôle       | Email           | Mot de passe |
 |------------|-----------------|--------------|
-| Utilisateur | user@example.com | password     |
-| Gestionnaire | admin@example.com | admin        |
+| Utilisateur | user@esgis.org | password     |
+| Gestionnaire | admin@esgis.org | admin        |
 
 ---
 

@@ -1,1 +1,14 @@
+<<<<<<< HEAD
 target/ 
+=======
+### Maven / build
+target/
+
+### Java
+*.class
+
+### Local databases / runtime artifacts
+*.db
+reservation.db
+
+>>>>>>> d185dfa8d4ca3cbd26d14d0a6e77ea87d06822a3

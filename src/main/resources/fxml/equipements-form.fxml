@@ -12,12 +12,14 @@
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
-                <Insets topRightBottomLeft="16"/>
+                <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
             <children>
                 <Label text="Réservation de Salles" styleClass="title-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button text="Annuler" onAction="#handleAnnuler" styleClass="secondary-button"/>
+                <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Profil" onAction="#handleProfile" styleClass="secondary-button"/>
+                <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
             </children>
         </HBox>
     </top>
@@ -25,7 +27,7 @@
     <center>
         <VBox spacing="24">
             <padding>
-                <Insets topRightBottomLeft="24"/>
+                <Insets top="24" right="24" bottom="24" left="24"/>
             </padding>
             <children>
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">

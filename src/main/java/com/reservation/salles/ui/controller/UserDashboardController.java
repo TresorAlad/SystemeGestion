@@ -8,10 +8,12 @@ import com.reservation.salles.service.EquipementService;
 import com.reservation.salles.util.NotificationUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -44,6 +46,11 @@ public class UserDashboardController {
     @FXML
     private FlowPane sallesFlow;
 
+    @FXML
+    private Button btnDashboard;
+    @FXML
+    private Button btnHistorique;
+
     private final SalleService salleService = new SalleService();
     private final EquipementService equipementService = new EquipementService();
     private Utilisateur currentUser;
@@ -66,7 +73,6 @@ public class UserDashboardController {
 
     private void chargerSalles() {
         toutesLesSalles.setAll(salleService.listerToutesLesSalles());
-        // charger les équipements disponibles avec leurs quantités
         quantitesEquipements.clear();
         for (Equipement e : equipementService.listerEquipements()) {
             quantitesEquipements.put(e.getNom(), e.getQuantite());
@@ -90,7 +96,8 @@ public class UserDashboardController {
     }
 
     private void rafraichirCartes(List<Salle> salles) {
-        if (sallesFlow == null) return;
+        if (sallesFlow == null)
+            return;
         sallesFlow.getChildren().clear();
         for (Salle salle : salles) {
             sallesFlow.getChildren().add(creerCarteSalle(salle));
@@ -101,11 +108,9 @@ public class UserDashboardController {
         VBox card = new VBox(8);
         card.getStyleClass().add("room-card");
 
-        // Image / placeholder
         StackPane imagePane = new StackPane();
         imagePane.getStyleClass().add("room-image");
 
-        // Image de la salle (jav.jpg à la racine du projet)
         ImageView imageView = new ImageView();
         try {
             Image image = new Image("file:jav.jpg", 210, 120, true, true);
@@ -138,13 +143,12 @@ public class UserDashboardController {
         Label capaLabel = new Label(salle.getCapacite() + " personnes");
         capaLabel.getStyleClass().add("room-meta");
 
-        // Chips d'équipement avec quantités
         HBox chips = new HBox(6);
+        chips.setAlignment(Pos.CENTER);
         chips.getChildren().addAll(
                 creerChipAvecQuantite("Projecteur"),
                 creerChipAvecQuantite("WiFi"),
-                creerChipAvecQuantite("PC")
-        );
+                creerChipAvecQuantite("PC"));
 
         Button reserverBtn = new Button("Réserver");
         reserverBtn.getStyleClass().add("primary-button");
@@ -183,9 +187,13 @@ public class UserDashboardController {
     @FXML
     private void handleMesReservations() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reservations-list.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historique.fxml"));
             Parent root = loader.load();
-            ReservationsListController controller = loader.getController();
+            HistoriqueController controller = loader.getController();
+            if (controller == null) {
+                NotificationUtil.erreur("Erreur: Le contrôleur est null.");
+                return;
+            }
             controller.initData(currentUser);
 
             Stage stage = (Stage) sallesFlow.getScene().getWindow();
@@ -194,7 +202,32 @@ public class UserDashboardController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible d'ouvrir la liste des réservations.");
+            String errMsg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            System.err.println("ERREUR DÉTAILLÉE: " + errMsg);
+            // On affiche l'erreur complète pour aider au débogage
+            NotificationUtil.erreur("Impossible d'ouvrir la liste des réservations: " + errMsg
+                    + "\nConsultez la console pour plus de détails.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("EXCEPTION GENERALE: " + e.getClass().getName() + ": " + e.getMessage());
+            NotificationUtil.erreur("Erreur inattendue: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            ProfilController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) sallesFlow.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -211,5 +244,33 @@ public class UserDashboardController {
             e.printStackTrace();
         }
     }
-}
 
+    @FXML
+    private void goToHistorique(ActionEvent event) throws IOException {
+        handleMesReservations();
+    }
+
+    @FXML
+    private void goToDashboard(ActionEvent event) throws IOException {
+        if (event == null) {
+            return;
+        }
+        Node source = (Node) event.getSource();
+        if (source == null || source.getScene() == null) {
+            return;
+        }
+        Stage stage = (Stage) source.getScene().getWindow();
+        if (stage == null) {
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user-dashboard.fxml"));
+        Parent root = loader.load();
+        UserDashboardController controller = loader.getController();
+        controller.setCurrentUser(currentUser);
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+        stage.setScene(scene);
+    }
+}

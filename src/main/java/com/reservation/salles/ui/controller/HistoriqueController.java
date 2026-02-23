@@ -18,10 +18,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
-public class ReservationsListController {
+public class HistoriqueController {
 
     @FXML
     private Label currentUserLabel;
@@ -56,10 +55,10 @@ public class ReservationsListController {
     @FXML
     private void initialize() {
         if (colSalle != null) {
-            if (colId != null) {
-                colId.setCellValueFactory(cell -> new SimpleStringProperty(
-                        cell.getValue() != null ? String.valueOf(cell.getValue().getIdReservation()) : ""));
-            }
+            reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+            colId.setCellValueFactory(
+                    cell -> new SimpleStringProperty(
+                            cell.getValue() != null ? String.valueOf(cell.getValue().getIdReservation()) : ""));
             colSalle.setCellValueFactory(cell -> new SimpleStringProperty(
                     (cell.getValue() != null && cell.getValue().getSalle() != null)
                             ? cell.getValue().getSalle().getNom()
@@ -105,9 +104,7 @@ public class ReservationsListController {
                 }
             });
 
-            colId.setCellValueFactory(
-                    cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getIdReservation())));
-
+            // Colonne Actions avec boutons
             colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
                 private final Button detailBtn = new Button("Détails");
                 private final Button annulerBtn = new Button("Annuler");
@@ -134,10 +131,11 @@ public class ReservationsListController {
                                 "Statut : %s",
                                 r.getIdReservation(),
                                 r.getUtilisateur() != null ? r.getUtilisateur().getNom() : "Inconnu",
-                                r.getSalle().getNom(),
-                                r.getDate(),
-                                r.getHeureDebut(), r.getHeureFin(),
-                                r.getStatut());
+                                r.getSalle() != null ? r.getSalle().getNom() : "Inconnue",
+                                r.getDate() != null ? r.getDate() : "Non définie",
+                                r.getHeureDebut() != null ? r.getHeureDebut() : "?",
+                                r.getHeureFin() != null ? r.getHeureFin() : "?",
+                                r.getStatut() != null ? r.getStatut() : "Inconnu");
                         NotificationUtil.info(msg);
                     });
 
@@ -153,6 +151,7 @@ public class ReservationsListController {
                         }
                     });
 
+                    // On n'affiche le bouton annuler que si c'est possible
                     if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
                         annulerBtn.setVisible(true);
                     } else {
@@ -162,16 +161,22 @@ public class ReservationsListController {
                     setGraphic(container);
                 }
             });
+
             reservationsTable.setItems(reservations);
         }
     }
 
     private void chargerReservations() {
         if (currentUser != null) {
-            if (currentUser.estGestionnaire()) {
-                reservations.setAll(reservationService.listerToutesLesReservations());
-            } else {
-                reservations.setAll(reservationService.listerParUtilisateur(currentUser.getIdUtilisateur()));
+            try {
+                if (currentUser.estGestionnaire()) {
+                    reservations.setAll(reservationService.listerToutesLesReservations());
+                } else {
+                    reservations.setAll(reservationService.listerParUtilisateur(currentUser.getIdUtilisateur()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                NotificationUtil.erreur("Erreur lors du chargement des réservations: " + e.getMessage());
             }
         }
     }
@@ -189,6 +194,23 @@ public class ReservationsListController {
             chargerReservations();
         } else {
             NotificationUtil.info("Cette réservation ne peut plus être annulée.");
+        }
+    }
+
+    @FXML
+    private void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            ProfilController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) reservationsTable.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -223,55 +245,6 @@ public class ReservationsListController {
     @FXML
     private void handleGoDashboard() {
         handleRetour();
-    }
-
-    @FXML
-    private void handleMesSalles() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager-rooms.fxml"));
-            Parent root = loader.load();
-            ManagerRoomsController controller = loader.getController();
-            controller.setCurrentUser(currentUser);
-            Stage stage = (Stage) reservationsTable.getScene().getWindow();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleGoToAddSalle() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/salle-form.fxml"));
-            Parent root = loader.load();
-            SalleFormController controller = loader.getController();
-            controller.setCurrentUser(currentUser);
-            Stage stage = (Stage) reservationsTable.getScene().getWindow();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleProfile() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
-            Parent root = loader.load();
-            ProfilController controller = loader.getController();
-            controller.setCurrentUser(currentUser);
-
-            Stage stage = (Stage) reservationsTable.getScene().getWindow();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

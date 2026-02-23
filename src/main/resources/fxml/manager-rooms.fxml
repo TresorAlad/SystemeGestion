@@ -12,12 +12,13 @@
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
-                <Insets topRightBottomLeft="16"/>
+                <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
             <children>
                 <Label text="Réservation de Salles" styleClass="title-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
                 <Label fx:id="currentUserLabel" styleClass="top-bar-user-label"/>
+                <Button text="Profil" onAction="#handleProfile" styleClass="secondary-button"/>
                 <Button text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
             </children>
         </HBox>
@@ -26,19 +27,27 @@
     <center>
         <VBox spacing="24">
             <padding>
-                <Insets topRightBottomLeft="24"/>
+                <Insets top="24" right="24" bottom="24" left="24"/>
             </padding>
             <children>
 
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
-                        <Button text="Tableau de bord" onAction="#handleGoDashboard"
-                                styleClass="nav-pill"/>
-                        <Button text="Historique des réservations" onAction="#handleMesReservations"
-                                styleClass="nav-pill"/>
-                        <Button text="Mes salles" styleClass="nav-pill nav-pill-active"/>
-                        <Button text="Ajouter Salle" onAction="#handleGoToAddSalle"
-                                styleClass="nav-pill"/>
+                        <Button text="Tableau de bord"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoDashboard"/>
+                        <Button text="Historique des réservations"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleMesReservations"/>
+                        <Button text="Mes salles"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-dashboard"/>
+                        <Button text="Ajouter Salle"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoToAddSalle"/>
                     </children>
                 </HBox>
 
