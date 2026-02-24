@@ -125,7 +125,11 @@ public class ReservationFormController {
                 return;
             }
 
-            NotificationUtil.succes("Demande de réservation créée et envoyée au gestionnaire.");
+            if (currentUser.estGestionnaire()) {
+                NotificationUtil.succes("Réservation effectuée avec succès.");
+            } else {
+                NotificationUtil.succes("Demande de réservation créée et envoyée au gestionnaire.");
+            }
             retourDashboard();
 
         } catch (DateTimeParseException e) {
@@ -140,10 +144,19 @@ public class ReservationFormController {
 
     private void retourDashboard() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user-dashboard.fxml"));
+            boolean isManager = currentUser != null && currentUser.estGestionnaire();
+            String fxml = isManager ? "/fxml/manager-dashboard.fxml" : "/fxml/user-dashboard.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
-            UserDashboardController controller = loader.getController();
-            controller.setCurrentUser(currentUser);
+
+            if (isManager) {
+                ManagerDashboardController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+            } else {
+                UserDashboardController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+            }
 
             Stage stage = (Stage) salleLabel.getScene().getWindow();
             Scene scene = new Scene(root);
@@ -162,10 +175,19 @@ public class ReservationFormController {
     @FXML
     private void handleGoHistorique() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reservations-list.fxml"));
+            boolean isManager = currentUser != null && currentUser.estGestionnaire();
+            String fxml = isManager ? "/fxml/reservations-list.fxml" : "/fxml/historique.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
-            ReservationsListController controller = loader.getController();
-            controller.initData(currentUser);
+
+            if (isManager) {
+                ReservationsListController controller = loader.getController();
+                controller.initData(currentUser);
+            } else {
+                HistoriqueController controller = loader.getController();
+                controller.initData(currentUser);
+            }
 
             Stage stage = (Stage) salleLabel.getScene().getWindow();
             Scene scene = new Scene(root);

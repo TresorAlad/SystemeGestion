@@ -17,8 +17,8 @@ public class SalleDAO {
         List<Salle> result = new ArrayList<>();
         String sql = "SELECT * FROM salles ORDER BY nom";
         try (Connection conn = DBConnection.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 result.add(map(rs));
@@ -32,7 +32,7 @@ public class SalleDAO {
     public Salle findById(int id) {
         String sql = "SELECT * FROM salles WHERE id_salle = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -49,7 +49,7 @@ public class SalleDAO {
     public Salle save(Salle s) {
         String sql = "INSERT INTO salles (nom, type, capacite, disponible, photo) VALUES (?,?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, s.getNom());
             ps.setString(2, s.getType());
@@ -72,8 +72,8 @@ public class SalleDAO {
     public int countDisponibles() {
         String sql = "SELECT COUNT(*) FROM salles WHERE disponible = 1";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
                 return rs.getInt(1);
@@ -82,6 +82,37 @@ public class SalleDAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean update(Salle s) {
+        String sql = "UPDATE salles SET nom=?, type=?, capacite=?, disponible=?, photo=? WHERE id_salle=?";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, s.getNom());
+            ps.setString(2, s.getType());
+            ps.setInt(3, s.getCapacite());
+            ps.setInt(4, s.isDisponible() ? 1 : 0);
+            ps.setString(5, s.getPhoto());
+            ps.setInt(6, s.getIdSalle());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(int id) {
+        String sql = "DELETE FROM salles WHERE id_salle = ?";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private Salle map(ResultSet rs) throws SQLException {
@@ -98,4 +129,3 @@ public class SalleDAO {
         return s;
     }
 }
-
