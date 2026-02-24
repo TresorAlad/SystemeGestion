@@ -122,23 +122,17 @@
 
 .text-input,
 .date-picker {
-    -fx-background-color: #f8fafc;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-color: #e2e8f0;
-    -fx-padding: 10 16 10 16;
-    -fx-transition: all 0.2s;
+    -fx-background-color: #f1f2f6;
+    -fx-background-radius: 999;
+    -fx-border-radius: 999;
+    -fx-border-color: transparent;
+    -fx-padding: 8 14 8 14;
 }
 
 .text-input:focused,
 .date-picker:focused {
     -fx-border-color: #005b66;
     -fx-background-color: #ffffff;
-    -fx-effect: dropshadow(gaussian, rgba(0, 91, 102, 0.1), 8, 0, 0, 2);
-}
-
-.text-input {
-    -fx-prompt-text-fill: #94a3b8;
 }
 
 .login-title {
@@ -331,100 +325,49 @@
     -fx-cursor: hand;
 }
 
-/* ====== Time Picker Popup ====== */
-.time-picker-dialog {
-    -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-color: #cbd5e1;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 20, 0, 0, 8);
-    -fx-padding: 0;
+.btn-outline:hover {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #9ca3af;
 }
 
-.time-picker-header {
-    -fx-background-color: white;
-    -fx-padding: 16 20 16 20;
-    -fx-border-color: transparent transparent #e2e8f0 transparent;
+/* Password Toggle Eye Button */
+.password-container {
+    -fx-alignment: CENTER_RIGHT;
 }
 
-.time-picker-header .label {
-    -fx-text-fill: #0ea5e9;
-    -fx-font-size: 18px;
-    -fx-font-weight: 600;
-}
-
-.time-picker-body {
-    -fx-padding: 20;
-    -fx-alignment: CENTER;
-}
-
-.time-spinner {
+.eye-button {
     -fx-background-color: transparent;
-}
-
-.time-spinner .text-field {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #0f172a;
-    -fx-font-size: 26px;
-    -fx-font-weight: 800;
-    -fx-alignment: CENTER;
-    -fx-pref-width: 80;
-}
-
-/* Forcer l'affichage horizontal pour plus de clarté si besoin, 
-   mais par défaut JavaFX empile verticalement les flèches */
-.time-spinner {
-    -fx-background-color: #f1f5f9;
-    -fx-background-radius: 8;
-    -fx-border-color: #e2e8f0;
-    -fx-border-radius: 8;
-    -fx-border-width: 1;
-}
-
-.time-spinner .increment-arrow-button,
-.time-spinner .decrement-arrow-button {
-    -fx-background-color: transparent;
-    -fx-padding: 10;
-}
-
-.time-spinner .increment-arrow-button .increment-arrow,
-.time-spinner .decrement-arrow-button .decrement-arrow {
-    -fx-background-color: #64748b;
-    /* Couleur des flèches */
-}
-
-.time-spinner .increment-arrow-button:hover,
-.time-spinner .decrement-arrow-button:hover {
-    -fx-background-color: #f1f5f9;
-}
-
-.time-separator {
-    -fx-font-size: 24px;
-    -fx-font-weight: 700;
-    -fx-text-fill: #94a3b8;
-    -fx-padding: 0 10 0 10;
-}
-
-.time-picker-footer {
-    -fx-background-color: #f8fafc;
-    -fx-border-color: #e2e8f0 transparent transparent transparent;
-}
-
-.time-picker-footer .button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent #e2e8f0 transparent transparent;
-    -fx-text-fill: #1e293b;
-    -fx-font-weight: 600;
-    -fx-padding: 12 0 12 0;
+    -fx-padding: 0 12 0 0;
     -fx-cursor: hand;
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 16px;
 }
 
-.time-picker-footer .button:hover {
-    -fx-background-color: #f1f5f9;
+.eye-button:hover {
+    -fx-text-fill: #005b66;
 }
 
-.time-picker-footer .button:last-child {
-    -fx-border-color: transparent;
+/* Notification Styles */
+.notification-icon-large {
+    -fx-font-size: 64px;
+    -fx-font-weight: bold;
+}
+
+.icon-success {
+    -fx-text-fill: #00897b;
+}
+
+.icon-error {
+    -fx-text-fill: #e53935;
+}
+
+.notification-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1f2937;
+}
+
+.notification-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
 }

@@ -33,17 +33,29 @@
                            maxWidth="340"
                            styleClass="text-input"/>
 
-                <Label text="Mot de passe"/>
-                <PasswordField fx:id="passwordField"
-                               promptText="******"
-                               maxWidth="340"
-                               styleClass="text-input"/>
+                <StackPane maxWidth="340">
+                    <children>
+                        <PasswordField fx:id="passwordField" promptText="******"
+                                       styleClass="text-input" maxWidth="Infinity"/>
+                        <TextField fx:id="passwordVisibleField" promptText="******"
+                                   styleClass="text-input" maxWidth="Infinity"
+                                   visible="false" managed="false"/>
+                        <Button onAction="#togglePassword" text="👁"
+                                styleClass="eye-button" StackPane.alignment="CENTER_RIGHT"/>
+                    </children>
+                </StackPane>
 
-                <Label text="Confirmer mot de passe"/>
-                <PasswordField fx:id="confirmPasswordField"
-                               promptText="******"
-                               maxWidth="340"
-                               styleClass="text-input"/>
+                <StackPane maxWidth="340">
+                    <children>
+                        <PasswordField fx:id="confirmPasswordField" promptText="******"
+                                       styleClass="text-input" maxWidth="Infinity"/>
+                        <TextField fx:id="confirmPasswordVisibleField" promptText="******"
+                                   styleClass="text-input" maxWidth="Infinity"
+                                   visible="false" managed="false"/>
+                        <Button onAction="#toggleConfirmPassword" text="👁"
+                                styleClass="eye-button" StackPane.alignment="CENTER_RIGHT"/>
+                    </children>
+                </StackPane>
 
                 <Label fx:id="errorLabel" textFill="red"/>
 

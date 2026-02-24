@@ -97,7 +97,8 @@ public class ReservationFormController {
     private void handleValider() {
         LocalDate date = datePicker.getValue();
         if (date == null) {
-            NotificationUtil.info("Veuillez choisir une date.");
+            NotificationUtil.showPage(salleLabel, "Date manquante", "Veuillez choisir une date pour votre réservation.",
+                    currentUser, false);
             return;
         }
         try {
@@ -105,7 +106,8 @@ public class ReservationFormController {
             LocalTime fin = LocalTime.parse(heureFinField.getText().replace(" ", ""));
 
             if (!fin.isAfter(debut)) {
-                NotificationUtil.info("L'heure de fin doit être après l'heure de début.");
+                NotificationUtil.showPage(salleLabel, "Horaire invalide",
+                        "L'heure de fin doit être après l'heure de début.", currentUser, false);
                 return;
             }
 
@@ -121,19 +123,29 @@ public class ReservationFormController {
             Reservation r = reservationService.creerReservation(currentUser, salle, date, debut, fin, nom, telephone,
                     objet);
             if (r == null) {
-                NotificationUtil.info("La salle n'est pas disponible pour ce créneau.");
+                NotificationUtil.showPage(salleLabel, "Salle indisponible",
+                        "La salle n'est pas disponible pour ce créneau horaire.", currentUser, false);
                 return;
             }
 
             if (currentUser.estGestionnaire()) {
-                NotificationUtil.succes("Réservation effectuée avec succès.");
+                NotificationUtil.showSuccess(
+                        (javafx.stage.Stage) salleLabel.getScene().getWindow(),
+                        "Réservation confirmée",
+                        "La réservation pour la salle '" + salle.getNom() + "' a été effectuée avec succès.",
+                        currentUser);
             } else {
-                NotificationUtil.succes("Demande de réservation créée et envoyée au gestionnaire.");
+                NotificationUtil.showSuccess(
+                        (javafx.stage.Stage) salleLabel.getScene().getWindow(),
+                        "Demande envoyée",
+                        "Votre demande de réservation pour la salle '" + salle.getNom()
+                                + "' a été transmise au gestionnaire.",
+                        currentUser);
             }
-            retourDashboard();
 
         } catch (DateTimeParseException e) {
-            NotificationUtil.info("Format d'heure invalide (attendu HH:MM).");
+            NotificationUtil.showPage(salleLabel, "Format invalide", "Le format d'heure est invalide (attendu HH:MM).",
+                    currentUser, false);
         }
     }
 

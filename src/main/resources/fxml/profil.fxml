@@ -48,7 +48,13 @@
                                         <Label fx:id="emailLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                                         <Label text="Nouveau mot de passe :" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
-                                        <PasswordField fx:id="passwordField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="text-input"/>
+                                        <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1">
+                                            <children>
+                                                <PasswordField fx:id="passwordField" styleClass="text-input" maxWidth="Infinity"/>
+                                                <TextField fx:id="passwordVisibleField" styleClass="text-input" maxWidth="Infinity" visible="false" managed="false"/>
+                                                <Button onAction="#togglePassword" text="👁" styleClass="eye-button" StackPane.alignment="CENTER_RIGHT"/>
+                                            </children>
+                                        </StackPane>
 
                                         <Label text="Rôle :" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
                                         <Label fx:id="roleLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>

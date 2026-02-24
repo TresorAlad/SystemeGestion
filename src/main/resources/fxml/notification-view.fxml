@@ -21,17 +21,33 @@
     </top>
 
     <center>
-        <StackPane>
+        <VBox alignment="CENTER" spacing="30" maxWidth="500">
+            <padding>
+                <Insets top="40" right="40" bottom="40" left="40"/>
+            </padding>
             <children>
-                <VBox alignment="CENTER" spacing="12" styleClass="notification-card">
+                <VBox alignment="CENTER" spacing="20" styleClass="card">
                     <children>
-                        <Label fx:id="iconLabel" text="✓" style="-fx-font-size: 48px;"/>
-                        <Label fx:id="messageLabel" text="Réservation Réussie"
-                               style="-fx-font-size: 16px; -fx-font-weight: 600;"/>
+                        <StackPane>
+                            <children>
+                                <Label fx:id="iconLabel" text="✓" styleClass="notification-icon-large"/>
+                            </children>
+                        </StackPane>
+                        
+                        <VBox alignment="CENTER" spacing="8">
+                            <children>
+                                <Label fx:id="messageLabel" text="Opération Réussie" styleClass="notification-title"/>
+                                <Label fx:id="descriptionLabel" text="Votre demande a été traitée avec succès." 
+                                       styleClass="notification-description" wrapText="true" textAlignment="CENTER"/>
+                            </children>
+                        </VBox>
+                        
+                        <Button fx:id="actionButton" onAction="#handleAction" 
+                                styleClass="primary-button" prefWidth="200"/>
                     </children>
                 </VBox>
             </children>
-        </StackPane>
+        </VBox>
     </center>
 </BorderPane>
 

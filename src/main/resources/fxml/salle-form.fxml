@@ -102,6 +102,8 @@
 
                         <HBox alignment="CENTER_RIGHT" spacing="12">
                             <children>
+                                <Button text="Annuler" onAction="#handleAnnuler"
+                                        styleClass="secondary-button"/>
                                 <Button text="Suivant" onAction="#handleSuivant"
                                         styleClass="primary-button"/>
                             </children>

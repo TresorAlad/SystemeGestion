@@ -21,9 +21,17 @@
                 <TextField fx:id="emailField" promptText="exemple@gmail.com"
                            maxWidth="340" styleClass="text-input"/>
 
-                <Label text="Password"/>
-                <PasswordField fx:id="passwordField" promptText="******"
-                               maxWidth="340" styleClass="text-input"/>
+                <StackPane maxWidth="340">
+                    <children>
+                        <PasswordField fx:id="passwordField" promptText="******"
+                                       styleClass="text-input" maxWidth="Infinity"/>
+                        <TextField fx:id="passwordVisibleField" promptText="******"
+                                   styleClass="text-input" maxWidth="Infinity"
+                                   visible="false" managed="false"/>
+                        <Button onAction="#togglePassword" text="👁"
+                                styleClass="eye-button" StackPane.alignment="CENTER_RIGHT"/>
+                    </children>
+                </StackPane>
 
                 <Label fx:id="errorLabel" textFill="red"/>
 

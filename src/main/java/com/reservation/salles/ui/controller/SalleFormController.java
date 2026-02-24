@@ -1,7 +1,6 @@
 package com.reservation.salles.ui.controller;
 
 import com.reservation.salles.model.Salle;
-import com.reservation.salles.service.SalleService;
 import com.reservation.salles.util.NotificationUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +33,6 @@ public class SalleFormController {
     @FXML
     private Label currentUserLabel;
 
-    private final SalleService salleService = new SalleService();
     private String photoRelativePath;
     private com.reservation.salles.model.Utilisateur currentUser;
     private Salle salleAmodifier;
@@ -85,7 +83,8 @@ public class SalleFormController {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible de copier l'image.");
+            NotificationUtil.showPage(nomField, "Erreur d'image", "Impossible de copier l'image sélectionnée.",
+                    currentUser, false);
         }
     }
 
@@ -97,26 +96,26 @@ public class SalleFormController {
         try {
             capacite = Integer.parseInt(capaciteField.getText());
         } catch (NumberFormatException e) {
-            NotificationUtil.info("Capacité invalide.");
+            NotificationUtil.showPage(nomField, "Capacité invalide",
+                    "Veuillez saisir un nombre valide pour la capacité.", currentUser, false);
             return;
         }
         if (nom == null || nom.isBlank() || type == null || type.isBlank()) {
-            NotificationUtil.info("Veuillez remplir les champs obligatoires.");
+            NotificationUtil.showPage(nomField, "Champs manquants", "Veuillez remplir le nom et le type de salle.",
+                    currentUser, false);
             return;
         }
 
+        Salle salleToProcess;
         if (salleAmodifier == null) {
-            Salle salle = new Salle(0, nom, type, capacite, true);
-            salle.setPhoto(photoRelativePath != null ? photoRelativePath : "jav.jpg");
-            salleService.ajouterSalle(salle);
-            NotificationUtil.succes("Salle créée.");
+            salleToProcess = new Salle(0, nom, type, capacite, true);
+            salleToProcess.setPhoto(photoRelativePath != null ? photoRelativePath : "jav.jpg");
         } else {
             salleAmodifier.setNom(nom);
             salleAmodifier.setType(type);
             salleAmodifier.setCapacite(capacite);
             salleAmodifier.setPhoto(photoRelativePath != null ? photoRelativePath : "jav.jpg");
-            salleService.modifierSalle(salleAmodifier);
-            NotificationUtil.succes("Salle modifiée.");
+            salleToProcess = salleAmodifier;
         }
 
         // Aller vers l'écran d'équipements
@@ -128,6 +127,7 @@ public class SalleFormController {
             if (currentUser != null) {
                 controller.setCurrentUser(currentUser);
             }
+            controller.setSalle(salleToProcess);
 
             Stage stage = (Stage) nomField.getScene().getWindow();
             Scene scene = new Scene(root);

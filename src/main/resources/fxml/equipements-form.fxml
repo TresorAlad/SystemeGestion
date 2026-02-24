@@ -32,7 +32,22 @@
             <children>
                 <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
                     <children>
-                        <Button text="Equipement" styleClass="nav-pill nav-pill-active"/>
+                        <Button text="Tableau de bord"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleGoDashboard"/>
+                        <Button text="Historique des réservations"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleMesReservations"/>
+                        <Button text="Mes salles"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-outline"
+                                onAction="#handleMesSalles"/>
+                        <Button text="Ajouter Salle"
+                                prefWidth="260" prefHeight="80"
+                                styleClass="btn-dashboard"
+                                onAction="#handleAjouterSalle"/>
                     </children>
                 </HBox>
 
@@ -50,30 +65,30 @@
                                 <Label text="Nom" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                                 <Label text="Quantité" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                <TextField fx:id="nom1Field" promptText="Nom"
-                                           GridPane.rowIndex="1" GridPane.columnIndex="0"
-                                           styleClass="text-input"/>
+                                <ComboBox fx:id="nom1Field" promptText="Choisir un équipement"
+                                          GridPane.rowIndex="1" GridPane.columnIndex="0"
+                                          maxWidth="Infinity" styleClass="combo-box"/>
                                 <TextField fx:id="qte1Field" promptText="Quantité"
                                            GridPane.rowIndex="1" GridPane.columnIndex="1"
                                            styleClass="text-input"/>
 
-                                <TextField fx:id="nom2Field" promptText="Nom"
-                                           GridPane.rowIndex="2" GridPane.columnIndex="0"
-                                           styleClass="text-input"/>
+                                <ComboBox fx:id="nom2Field" promptText="Choisir un équipement"
+                                          GridPane.rowIndex="2" GridPane.columnIndex="0"
+                                          maxWidth="Infinity" styleClass="combo-box"/>
                                 <TextField fx:id="qte2Field" promptText="Quantité"
                                            GridPane.rowIndex="2" GridPane.columnIndex="1"
                                            styleClass="text-input"/>
 
-                                <TextField fx:id="nom3Field" promptText="Nom"
-                                           GridPane.rowIndex="3" GridPane.columnIndex="0"
-                                           styleClass="text-input"/>
+                                <ComboBox fx:id="nom3Field" promptText="Choisir un équipement"
+                                          GridPane.rowIndex="3" GridPane.columnIndex="0"
+                                          maxWidth="Infinity" styleClass="combo-box"/>
                                 <TextField fx:id="qte3Field" promptText="Quantité"
                                            GridPane.rowIndex="3" GridPane.columnIndex="1"
                                            styleClass="text-input"/>
 
-                                <TextField fx:id="nom4Field" promptText="Nom"
-                                           GridPane.rowIndex="4" GridPane.columnIndex="0"
-                                           styleClass="text-input"/>
+                                <ComboBox fx:id="nom4Field" promptText="Choisir un équipement"
+                                          GridPane.rowIndex="4" GridPane.columnIndex="0"
+                                          maxWidth="Infinity" styleClass="combo-box"/>
                                 <TextField fx:id="qte4Field" promptText="Quantité"
                                            GridPane.rowIndex="4" GridPane.columnIndex="1"
                                            styleClass="text-input"/>

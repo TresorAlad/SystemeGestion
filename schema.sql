@@ -74,7 +74,9 @@ INSERT INTO salles (nom, type, capacite, disponible, photo) VALUES
 INSERT INTO equipements (nom, quantite) VALUES
 ('Projecteur', 2),
 ('WiFi', 5),
-('Tableau blanc', 3);
+('Climatiseur', 5),
+('Tableau', 3),
+('Ecran', 3);
 
 INSERT INTO salle_equipements (id_salle, id_equipement) VALUES
 (1,1),(1,2),(2,2),(2,3),(3,1),(3,2),(3,3);

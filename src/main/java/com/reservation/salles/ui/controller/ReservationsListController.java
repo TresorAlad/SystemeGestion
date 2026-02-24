@@ -144,7 +144,7 @@ public class ReservationsListController {
                                 r.getTelephone(),
                                 r.getObjet(),
                                 r.getStatut());
-                        NotificationUtil.info(msg);
+                        NotificationUtil.showPage(reservationsTable, "Détails de réservation", msg, currentUser, true);
                     });
 
                     annulerBtn.getStyleClass().setAll("danger-button");
@@ -152,10 +152,15 @@ public class ReservationsListController {
                     annulerBtn.setOnAction(event -> {
                         if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
                             reservationService.annulerReservation(r);
-                            NotificationUtil.info("Réservation annulée.");
-                            chargerReservations();
+                            NotificationUtil.showSuccess(
+                                    (Stage) reservationsTable.getScene().getWindow(),
+                                    "Réservation Annulée",
+                                    "La réservation pour '" + (r.getSalle() != null ? r.getSalle().getNom()
+                                            : "#" + r.getIdReservation()) + "' a été annulée.",
+                                    currentUser);
                         } else {
-                            NotificationUtil.info("Cette réservation ne peut plus être annulée.");
+                            NotificationUtil.showPage(reservationsTable, "Action impossible",
+                                    "Cette réservation ne peut plus être annulée.", currentUser, false);
                         }
                     });
 
@@ -186,15 +191,20 @@ public class ReservationsListController {
     private void handleAnnuler() {
         Reservation selected = reservationsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            NotificationUtil.info("Sélectionnez une réservation.");
+            NotificationUtil.showPage(reservationsTable, "Sélection requise",
+                    "Veuillez sélectionner une réservation dans la liste.", currentUser, false);
             return;
         }
         if ("VALIDEE".equals(selected.getStatut()) || "EN_ATTENTE".equals(selected.getStatut())) {
             reservationService.annulerReservation(selected);
-            NotificationUtil.info("Réservation annulée.");
-            chargerReservations();
+            NotificationUtil.showSuccess(
+                    (Stage) reservationsTable.getScene().getWindow(),
+                    "Réservation Annulée",
+                    "La réservation a été annulée avec succès.",
+                    currentUser);
         } else {
-            NotificationUtil.info("Cette réservation ne peut plus être annulée.");
+            NotificationUtil.showPage(reservationsTable, "Annulation refusée",
+                    "Le statut actuel de cette réservation ne permet pas son annulation.", currentUser, false);
         }
     }
 
@@ -222,7 +232,8 @@ public class ReservationsListController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Erreur lors du retour au tableau de bord.");
+            NotificationUtil.showPage(reservationsTable, "Erreur de navigation",
+                    "Impossible de retourner au tableau de bord.", currentUser, false);
         }
     }
 
