@@ -329,3 +329,45 @@
     -fx-background-color: #f9fafb;
     -fx-border-color: #9ca3af;
 }
+
+/* Password Toggle Eye Button */
+.password-container {
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.eye-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 12 0 0;
+    -fx-cursor: hand;
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 16px;
+}
+
+.eye-button:hover {
+    -fx-text-fill: #005b66;
+}
+
+/* Notification Styles */
+.notification-icon-large {
+    -fx-font-size: 64px;
+    -fx-font-weight: bold;
+}
+
+.icon-success {
+    -fx-text-fill: #00897b;
+}
+
+.icon-error {
+    -fx-text-fill: #e53935;
+}
+
+.notification-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1f2937;
+}
+
+.notification-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
+}

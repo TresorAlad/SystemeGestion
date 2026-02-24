@@ -25,9 +25,16 @@ public class RegisterController {
     @FXML
     private PasswordField passwordField;
     @FXML
+    private TextField passwordVisibleField;
+    @FXML
     private PasswordField confirmPasswordField;
     @FXML
+    private TextField confirmPasswordVisibleField;
+    @FXML
     private Label errorLabel;
+
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmVisible = false;
 
     private final UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
 
@@ -35,8 +42,8 @@ public class RegisterController {
     private void handleRegister(ActionEvent event) {
         String nom = fullNameField.getText() == null ? "" : fullNameField.getText().trim();
         String email = emailField.getText() == null ? "" : emailField.getText().trim();
-        String pwd = passwordField.getText() == null ? "" : passwordField.getText();
-        String confirm = confirmPasswordField.getText() == null ? "" : confirmPasswordField.getText();
+        String pwd = isPasswordVisible ? passwordVisibleField.getText() : passwordField.getText();
+        String confirm = isConfirmVisible ? confirmPasswordVisibleField.getText() : confirmPasswordField.getText();
 
         if (nom.isBlank() || email.isBlank() || pwd.isBlank() || confirm.isBlank()) {
             errorLabel.setText("Veuillez remplir tous les champs.");
@@ -58,8 +65,49 @@ public class RegisterController {
         u.setRole("UTILISATEUR");
         utilisateurDAO.save(u);
 
-        NotificationUtil.succes("Compte créé. Vous pouvez vous connecter.");
-        handleGoToLogin(event);
+        NotificationUtil.showSuccess(
+                (Stage) fullNameField.getScene().getWindow(),
+                "Compte créé",
+                "Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter avec vos identifiants.",
+                null);
+    }
+
+    @FXML
+    private void togglePassword() {
+        if (isPasswordVisible) {
+            passwordField.setText(passwordVisibleField.getText());
+            passwordVisibleField.setVisible(false);
+            passwordVisibleField.setManaged(false);
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            isPasswordVisible = false;
+        } else {
+            passwordVisibleField.setText(passwordField.getText());
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            passwordVisibleField.setVisible(true);
+            passwordVisibleField.setManaged(true);
+            isPasswordVisible = true;
+        }
+    }
+
+    @FXML
+    private void toggleConfirmPassword() {
+        if (isConfirmVisible) {
+            confirmPasswordField.setText(confirmPasswordVisibleField.getText());
+            confirmPasswordVisibleField.setVisible(false);
+            confirmPasswordVisibleField.setManaged(false);
+            confirmPasswordField.setVisible(true);
+            confirmPasswordField.setManaged(true);
+            isConfirmVisible = false;
+        } else {
+            confirmPasswordVisibleField.setText(confirmPasswordField.getText());
+            confirmPasswordField.setVisible(false);
+            confirmPasswordField.setManaged(false);
+            confirmPasswordVisibleField.setVisible(true);
+            confirmPasswordVisibleField.setManaged(true);
+            isConfirmVisible = true;
+        }
     }
 
     @FXML
@@ -84,8 +132,7 @@ public class RegisterController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible d'ouvrir l'écran de connexion.");
+            errorLabel.setText("Impossible d'ouvrir l'écran de connexion.");
         }
     }
 }
-

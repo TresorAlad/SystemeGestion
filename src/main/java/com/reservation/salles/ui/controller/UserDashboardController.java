@@ -180,7 +180,8 @@ public class UserDashboardController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible d'ouvrir le formulaire de réservation.");
+            NotificationUtil.showPage(sallesFlow, "Erreur de formulaire",
+                    "Impossible d'ouvrir le formulaire de réservation.", currentUser, false);
         }
     }
 
@@ -191,7 +192,8 @@ public class UserDashboardController {
             Parent root = loader.load();
             HistoriqueController controller = loader.getController();
             if (controller == null) {
-                NotificationUtil.erreur("Erreur: Le contrôleur est null.");
+                NotificationUtil.showPage(sallesFlow, "Erreur de chargement",
+                        "Désolé, une erreur est survenue lors de l'accès à l'historique.", currentUser, false);
                 return;
             }
             controller.initData(currentUser);
@@ -205,12 +207,13 @@ public class UserDashboardController {
             String errMsg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             System.err.println("ERREUR DÉTAILLÉE: " + errMsg);
             // On affiche l'erreur complète pour aider au débogage
-            NotificationUtil.erreur("Impossible d'ouvrir la liste des réservations: " + errMsg
-                    + "\nConsultez la console pour plus de détails.");
+            NotificationUtil.showPage(sallesFlow, "Erreur système",
+                    "Impossible d'accéder à vos réservations pour le moment.", currentUser, false);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("EXCEPTION GENERALE: " + e.getClass().getName() + ": " + e.getMessage());
-            NotificationUtil.erreur("Erreur inattendue: " + e.getMessage());
+            NotificationUtil.showPage(sallesFlow, "Erreur inattendue",
+                    "Un problème technique empêche l'affichage de cette page.", currentUser, false);
         }
     }
 

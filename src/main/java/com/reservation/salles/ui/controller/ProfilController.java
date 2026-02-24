@@ -29,6 +29,8 @@ public class ProfilController {
     @FXML
     private PasswordField passwordField;
     @FXML
+    private TextField passwordVisibleField;
+    @FXML
     private Label emailLabel;
     @FXML
     private Label roleLabel;
@@ -37,6 +39,7 @@ public class ProfilController {
     @FXML
     private ComboBox<Utilisateur> userComboBox;
 
+    private boolean isPasswordVisible = false;
     private Utilisateur currentUser;
     private final UtilisateurService utilisateurService = new UtilisateurService();
 
@@ -54,6 +57,7 @@ public class ProfilController {
         emailLabel.setText(currentUser.getEmail());
         roleLabel.setText(currentUser.getRole());
         passwordField.setText(currentUser.getMotDePasse());
+        passwordVisibleField.setText(currentUser.getMotDePasse());
 
         if (currentUser.estGestionnaire()) {
             adminSection.setVisible(true);
@@ -86,22 +90,27 @@ public class ProfilController {
     private void handlePromouvoir() {
         Utilisateur selected = userComboBox.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            NotificationUtil.info("Veuillez sélectionner un utilisateur.");
+            NotificationUtil.showPage(nomField, "Sélection erronée",
+                    "Veuillez sélectionner un utilisateur à promouvoir.", currentUser, false);
             return;
         }
 
         utilisateurService.promouvoirEnGestionnaire(selected.getIdUtilisateur());
-        NotificationUtil.info("L'utilisateur " + selected.getNom() + " a été promu Gestionnaire.");
-        chargerListeUtilisateurs();
+        NotificationUtil.showSuccess(
+                (Stage) nomField.getScene().getWindow(),
+                "Promotion réussie",
+                "L'utilisateur " + selected.getNom() + " a été promu Gestionnaire avec succès.",
+                currentUser);
     }
 
     @FXML
     private void handleSauvegarder() {
         String nouveauNom = nomField.getText();
-        String nouveauPass = passwordField.getText();
+        String nouveauPass = isPasswordVisible ? passwordVisibleField.getText() : passwordField.getText();
 
         if (nouveauNom == null || nouveauNom.isBlank() || nouveauPass == null || nouveauPass.isBlank()) {
-            NotificationUtil.info("Le nom et le mot de passe ne peuvent pas être vides.");
+            NotificationUtil.showPage(nomField, "Données invalides", "Le nom et le mot de passe sont obligatoires.",
+                    currentUser, false);
             return;
         }
 
@@ -112,7 +121,11 @@ public class ProfilController {
         currentUser.setMotDePasse(nouveauPass);
 
         currentUserLabelTop.setText(nouveauNom);
-        NotificationUtil.succes("Profil mis à jour avec succès.");
+        NotificationUtil.showSuccess(
+                (Stage) nomField.getScene().getWindow(),
+                "Profil mis à jour",
+                "Vos informations ont été enregistrées avec succès.",
+                currentUser);
     }
 
     @FXML
@@ -137,6 +150,25 @@ public class ProfilController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void togglePassword() {
+        if (isPasswordVisible) {
+            passwordField.setText(passwordVisibleField.getText());
+            passwordVisibleField.setVisible(false);
+            passwordVisibleField.setManaged(false);
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            isPasswordVisible = false;
+        } else {
+            passwordVisibleField.setText(passwordField.getText());
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            passwordVisibleField.setVisible(true);
+            passwordVisibleField.setManaged(true);
+            isPasswordVisible = true;
         }
     }
 }

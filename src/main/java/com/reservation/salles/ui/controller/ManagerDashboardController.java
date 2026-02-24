@@ -4,6 +4,7 @@ import com.reservation.salles.model.Reservation;
 import com.reservation.salles.model.Utilisateur;
 import com.reservation.salles.service.ReservationService;
 import com.reservation.salles.service.SalleService;
+import com.reservation.salles.util.NotificationUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -123,15 +124,21 @@ public class ManagerDashboardController {
                 btnValider.setOnAction(event -> {
                     Reservation r = getTableView().getItems().get(getIndex());
                     reservationService.validerReservation(r);
-                    recentesTable.refresh();
-                    chargerDashboard();
+                    NotificationUtil.showSuccess(
+                            (Stage) currentUserLabel.getScene().getWindow(),
+                            "Réservation Acceptée",
+                            "La réservation pour '" + r.getSalle().getNom() + "' a été validée.",
+                            currentUser);
                 });
 
                 btnRejeter.setOnAction(event -> {
                     Reservation r = getTableView().getItems().get(getIndex());
                     reservationService.rejeterReservation(r);
-                    recentesTable.refresh();
-                    chargerDashboard();
+                    NotificationUtil.showSuccess(
+                            (Stage) currentUserLabel.getScene().getWindow(),
+                            "Réservation Rejetée",
+                            "La réservation pour '" + r.getSalle().getNom() + "' a été refusée.",
+                            currentUser);
                 });
             }
 

@@ -23,7 +23,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -213,7 +212,8 @@ public class ManagerRoomsController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible d'ouvrir le formulaire de réservation.");
+            NotificationUtil.showPage(sallesFlow, "Erreur de navigation",
+                    "Impossible d'ouvrir le formulaire de réservation.", currentUser, false);
         }
     }
 
@@ -231,18 +231,25 @@ public class ManagerRoomsController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            NotificationUtil.erreur("Impossible d'ouvrir le formulaire de modification.");
+            NotificationUtil.showPage(sallesFlow, "Erreur de navigation",
+                    "Impossible d'ouvrir le formulaire de modification.", currentUser, false);
         }
     }
 
     private void supprimerSalle(Salle salle) {
         boolean ok = salleService.supprimerSalle(salle.getIdSalle());
         if (ok) {
-            NotificationUtil.succes("La salle \"" + salle.getNom() + "\" a été supprimée.");
-            chargerSalles();
-            rafraichirCartes(toutesLesSalles);
+            NotificationUtil.showSuccess(
+                    (Stage) sallesFlow.getScene().getWindow(),
+                    "Salle supprimée",
+                    "La salle '" + salle.getNom() + "' a été supprimée avec succès.",
+                    currentUser);
         } else {
-            NotificationUtil.erreur("Impossible de supprimer la salle.");
+            NotificationUtil.showError(
+                    (Stage) sallesFlow.getScene().getWindow(),
+                    "Erreur de suppression",
+                    "Impossible de supprimer la salle. Elle possède peut-être des réservations actives.",
+                    currentUser);
         }
     }
 
