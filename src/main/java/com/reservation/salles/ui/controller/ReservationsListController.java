@@ -131,12 +131,18 @@ public class ReservationsListController {
                                 "Salle : %s\n" +
                                 "Date : %s\n" +
                                 "Horaire : %s - %s\n" +
+                                "Nom réservataire : %s\n" +
+                                "Téléphone : %s\n" +
+                                "Objet : %s\n" +
                                 "Statut : %s",
                                 r.getIdReservation(),
                                 r.getUtilisateur() != null ? r.getUtilisateur().getNom() : "Inconnu",
                                 r.getSalle().getNom(),
                                 r.getDate(),
                                 r.getHeureDebut(), r.getHeureFin(),
+                                r.getNomReservataire(),
+                                r.getTelephone(),
+                                r.getObjet(),
                                 r.getStatut());
                         NotificationUtil.info(msg);
                     });

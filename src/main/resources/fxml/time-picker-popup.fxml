@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:id="pickerRoot" styleClass="time-picker-dialog" spacing="0" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.reservation.salles.ui.controller.TimePickerController">
+    
+    <VBox styleClass="time-picker-header">
+        <Label text="Définir l'heure" />
+    </VBox>
+
+    <HBox styleClass="time-picker-body">
+        <Spinner fx:id="hourSpinner" styleClass="time-spinner">
+            <valueFactory>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="12" initialValue="8" amountToStepBy="1" wrapAround="true"/>
+            </valueFactory>
+        </Spinner>
+        
+        <Label text=":" styleClass="time-separator"/>
+        
+        <Spinner fx:id="minuteSpinner" styleClass="time-spinner">
+            <valueFactory>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59" initialValue="0" amountToStepBy="1" wrapAround="true"/>
+            </valueFactory>
+        </Spinner>
+    </HBox>
+
+    <HBox styleClass="time-picker-footer">
+        <Button text="Annuler" onAction="#handleCancel" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+        <Button text="Effacer" onAction="#handleClear" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+        <Button text="Définir" onAction="#handleSet" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+    </HBox>
+</VBox>

@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import javafx.stage.Popup;
+import javafx.scene.input.MouseEvent;
 
 public class ReservationFormController {
 
@@ -31,6 +33,12 @@ public class ReservationFormController {
     private TextField heureDebutField;
     @FXML
     private TextField heureFinField;
+    @FXML
+    private TextField nomField;
+    @FXML
+    private TextField telephoneField;
+    @FXML
+    private TextField objetField;
 
     private Utilisateur currentUser;
     private Salle salle;
@@ -47,6 +55,45 @@ public class ReservationFormController {
     }
 
     @FXML
+    public void initialize() {
+        // Rendre les champs non édifiables pour forcer l'utilisation du picker
+        heureDebutField.setEditable(false);
+        heureFinField.setEditable(false);
+
+        // Ouvrir le picker au clic
+        heureDebutField.setOnMouseClicked(this::showTimePicker);
+        heureFinField.setOnMouseClicked(this::showTimePicker);
+
+        // Valeur par défaut pour la date (aujourd'hui)
+        if (datePicker != null) {
+            datePicker.setValue(LocalDate.now());
+        }
+    }
+
+    private void showTimePicker(MouseEvent event) {
+        TextField field = (TextField) event.getSource();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/time-picker-popup.fxml"));
+            Parent root = loader.load();
+
+            Popup popup = new Popup();
+            popup.getContent().add(root);
+            popup.setAutoHide(true);
+
+            TimePickerController controller = loader.getController();
+            controller.init(popup, field);
+
+            // Positionnement juste au-dessous du champ
+            double x = field.localToScreen(0, 0).getX();
+            double y = field.localToScreen(0, 0).getY() + field.getHeight();
+            popup.show(field.getScene().getWindow(), x, y);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleValider() {
         LocalDate date = datePicker.getValue();
         if (date == null) {
@@ -54,15 +101,25 @@ public class ReservationFormController {
             return;
         }
         try {
-            LocalTime debut = LocalTime.parse(heureDebutField.getText());
-            LocalTime fin = LocalTime.parse(heureFinField.getText());
+            LocalTime debut = LocalTime.parse(heureDebutField.getText().replace(" ", ""));
+            LocalTime fin = LocalTime.parse(heureFinField.getText().replace(" ", ""));
 
             if (!fin.isAfter(debut)) {
                 NotificationUtil.info("L'heure de fin doit être après l'heure de début.");
                 return;
             }
 
-            Reservation r = reservationService.creerReservation(currentUser, salle, date, debut, fin);
+            String nom = nomField.getText();
+            String telephone = telephoneField.getText();
+            String objet = objetField.getText();
+
+            if (nom.isEmpty() || telephone.isEmpty() || objet.isEmpty()) {
+                NotificationUtil.info("Veuillez remplir tous les champs (Nom, Téléphone, Objet).");
+                return;
+            }
+
+            Reservation r = reservationService.creerReservation(currentUser, salle, date, debut, fin, nom, telephone,
+                    objet);
             if (r == null) {
                 NotificationUtil.info("La salle n'est pas disponible pour ce créneau.");
                 return;

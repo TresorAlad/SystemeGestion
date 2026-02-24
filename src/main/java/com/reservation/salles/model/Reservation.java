@@ -12,17 +12,23 @@ public class Reservation {
     private LocalTime heureDebut;
     private LocalTime heureFin;
     private String statut;
+    private String nomReservataire;
+    private String telephone;
+    private String objet;
 
     public Reservation() {
     }
 
     public Reservation(int idReservation,
-                       Utilisateur utilisateur,
-                       Salle salle,
-                       LocalDate date,
-                       LocalTime heureDebut,
-                       LocalTime heureFin,
-                       String statut) {
+            Utilisateur utilisateur,
+            Salle salle,
+            LocalDate date,
+            LocalTime heureDebut,
+            LocalTime heureFin,
+            String statut,
+            String nomReservataire,
+            String telephone,
+            String objet) {
         this.idReservation = idReservation;
         this.utilisateur = utilisateur;
         this.salle = salle;
@@ -30,6 +36,9 @@ public class Reservation {
         this.heureDebut = heureDebut;
         this.heureFin = heureFin;
         this.statut = statut;
+        this.nomReservataire = nomReservataire;
+        this.telephone = telephone;
+        this.objet = objet;
     }
 
     public int getIdReservation() {
@@ -86,6 +95,30 @@ public class Reservation {
 
     public void setStatut(String statut) {
         this.statut = statut;
+    }
+
+    public String getNomReservataire() {
+        return nomReservataire;
+    }
+
+    public void setNomReservataire(String nomReservataire) {
+        this.nomReservataire = nomReservataire;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getObjet() {
+        return objet;
+    }
+
+    public void setObjet(String objet) {
+        this.objet = objet;
     }
 
     public void annuler() {

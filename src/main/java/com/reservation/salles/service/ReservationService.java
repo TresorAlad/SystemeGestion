@@ -17,12 +17,13 @@ public class ReservationService {
     private final DemandeDAO demandeDAO = new DemandeDAO();
 
     public Reservation creerReservation(Utilisateur utilisateur, Salle salle,
-            LocalDate date, LocalTime debut, LocalTime fin) {
+            LocalDate date, LocalTime debut, LocalTime fin, String nom, String telephone, String objet) {
         if (!reservationDAO.isSalleDisponible(salle.getIdSalle(), date, debut, fin)) {
             return null;
         }
 
-        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, "EN_ATTENTE");
+        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, "EN_ATTENTE", nom, telephone,
+                objet);
         reservationDAO.save(reservation);
 
         Demande demande = new Demande();

@@ -21,8 +21,8 @@ public class ReservationDAO {
     private final SalleDAO salleDAO = new SalleDAO();
 
     public Reservation save(Reservation r) {
-        String sql = "INSERT INTO reservations (id_utilisateur, id_salle, date, heure_debut, heure_fin, statut) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reservations (id_utilisateur, id_salle, date, heure_debut, heure_fin, statut, nom_reservataire, telephone, objet) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -32,6 +32,9 @@ public class ReservationDAO {
             ps.setString(4, r.getHeureDebut().toString());
             ps.setString(5, r.getHeureFin().toString());
             ps.setString(6, r.getStatut());
+            ps.setString(7, r.getNomReservataire());
+            ps.setString(8, r.getTelephone());
+            ps.setString(9, r.getObjet());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -184,10 +187,13 @@ public class ReservationDAO {
         LocalTime debut = LocalTime.parse(rs.getString("heure_debut"));
         LocalTime fin = LocalTime.parse(rs.getString("heure_fin"));
         String statut = rs.getString("statut");
+        String nomReservataire = rs.getString("nom_reservataire");
+        String telephone = rs.getString("telephone");
+        String objet = rs.getString("objet");
 
         Utilisateur u = utilisateurDAO.findById(idUtilisateur);
         Salle s = salleDAO.findById(idSalle);
 
-        return new Reservation(idReservation, u, s, date, debut, fin, statut);
+        return new Reservation(idReservation, u, s, date, debut, fin, statut, nomReservataire, telephone, objet);
     }
 }

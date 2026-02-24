@@ -46,6 +46,9 @@ CREATE TABLE reservations (
     heure_debut    TEXT NOT NULL,
     heure_fin      TEXT NOT NULL,
     statut         TEXT NOT NULL CHECK (statut IN ('EN_ATTENTE','VALIDEE','REJETEE','ANNULEE')),
+    nom_reservataire TEXT,
+    telephone      TEXT,
+    objet          TEXT,
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE,
     FOREIGN KEY (id_salle)       REFERENCES salles(id_salle)       ON DELETE CASCADE
 );

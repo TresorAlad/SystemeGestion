@@ -65,6 +65,21 @@
                                 <TextField fx:id="heureFinField" promptText="HH:MM"
                                            GridPane.rowIndex="3" GridPane.columnIndex="1"
                                            styleClass="text-input"/>
+
+                                <Label text="Nom complet :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                <TextField fx:id="nomField" promptText="Ex: Jean Dupont"
+                                           GridPane.rowIndex="4" GridPane.columnIndex="1"
+                                           styleClass="text-input"/>
+
+                                <Label text="Téléphone :" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                                <TextField fx:id="telephoneField" promptText="Ex: +228 90 00 00 00"
+                                           GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                           styleClass="text-input"/>
+
+                                <Label text="Objet :" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                                <TextField fx:id="objetField" promptText="Ex: Réunion de projet"
+                                           GridPane.rowIndex="6" GridPane.columnIndex="1"
+                                           styleClass="text-input"/>
                             </children>
                         </GridPane>
 
