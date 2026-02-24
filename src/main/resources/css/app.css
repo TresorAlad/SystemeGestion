@@ -50,10 +50,11 @@
 
 .nav-bar {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 999;
-    -fx-border-radius: 999;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
     -fx-border-color: #e4e7f0;
-    -fx-padding: 8;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.04), 10, 0, 0, 2);
 }
 
 .nav-pill {
@@ -303,31 +304,36 @@
     -fx-font-weight: 600;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-padding: 8 16 8 16;
+    -fx-padding: 10 20 10 20;
     -fx-cursor: hand;
+    -fx-transition: 0.3s;
 }
 
 .btn-dashboard:hover {
     -fx-background-color: #024954;
-    -fx-effect: dropshadow(gaussian, rgba(0, 91, 102, 0.3), 10, 0.3, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 91, 102, 0.2), 8, 0.2, 0, 3);
+    -fx-translate-y: -1;
 }
 
 .btn-outline {
     -fx-background-color: #ffffff;
-    -fx-border-color: #d1d5db;
-    -fx-border-width: 2;
-    -fx-text-fill: #374151;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1.5;
+    -fx-text-fill: #475569;
     -fx-font-size: 14px;
     -fx-font-weight: 500;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-padding: 8 16 8 16;
+    -fx-padding: 10 20 10 20;
     -fx-cursor: hand;
+    -fx-transition: 0.2s;
 }
 
 .btn-outline:hover {
-    -fx-background-color: #f9fafb;
-    -fx-border-color: #9ca3af;
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd5e1;
+    -fx-text-fill: #1e293b;
+    -fx-translate-y: -1;
 }
 
 /* Password Toggle Eye Button */

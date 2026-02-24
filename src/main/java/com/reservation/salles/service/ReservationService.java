@@ -22,15 +22,11 @@ public class ReservationService {
             return null;
         }
 
-<<<<<<< HEAD
-        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, "EN_ATTENTE", nom, telephone,
-                objet);
-=======
         boolean isManager = utilisateur.estGestionnaire();
         String statut = isManager ? "VALIDEE" : "EN_ATTENTE";
 
-        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, statut);
->>>>>>> 70e640d7b1e0a741a3d26880dbde9f1ada031005
+        Reservation reservation = new Reservation(0, utilisateur, salle, date, debut, fin, statut, nom, telephone,
+                objet);
         reservationDAO.save(reservation);
 
         if (!isManager) {

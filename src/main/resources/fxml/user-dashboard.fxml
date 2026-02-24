@@ -36,41 +36,45 @@
                     <children>
                         <Button fx:id="btnDashboard"
                                 text="Tableau de bord"
-                                prefWidth="260"
-                                prefHeight="80"
+                                prefWidth="220"
+                                prefHeight="70"
                                 styleClass="btn-dashboard"
                                 onAction="#goToDashboard"/>
 
                         <Button fx:id="btnHistorique"
                                 text="Historique de réservation"
-                                prefWidth="260"
-                                prefHeight="80"
+                                prefWidth="220"
+                                prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#goToHistorique"/>
                     </children>
                 </HBox>
 
-                <!-- barre de recherche -->
-                <HBox alignment="CENTER">
+                <VBox spacing="16" styleClass="card" VBox.vgrow="ALWAYS">
                     <children>
-                        <TextField fx:id="searchField" promptText="Rechercher une salle"
-                                   styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                        <!-- En-tête avec titre + recherche -->
+                        <HBox spacing="16" alignment="CENTER_LEFT">
+                            <children>
+                                <Label fx:id="totalSallesLabel" text="Toutes les salles" styleClass="section-title"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="searchField"
+                                           promptText="🔍 Rechercher une salle..."
+                                           styleClass="search-field"
+                                           prefWidth="280"/>
+                            </children>
+                        </HBox>
+
+                        <!-- grille de cartes de salles -->
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                            <content>
+                                <FlowPane fx:id="sallesFlow" hgap="24" vgap="24"
+                                          prefWrapLength="880"
+                                          styleClass="rooms-flow"/>
+                            </content>
+                        </ScrollPane>
                     </children>
-                </HBox>
-
-                <!-- titre + compteur -->
-                <Label fx:id="totalSallesLabel" text="Toutes mes salles"
-                       styleClass="section-title" alignment="CENTER" maxWidth="Infinity"/>
-
-                <!-- grille de cartes de salles -->
-                <ScrollPane fitToWidth="true" prefViewportHeight="360"
-                            hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
-                    <content>
-                        <FlowPane fx:id="sallesFlow" hgap="24" vgap="24"
-                                  prefWrapLength="880"
-                                  styleClass="rooms-flow"/>
-                    </content>
-                </ScrollPane>
+                </VBox>
 
             </children>
         </VBox>

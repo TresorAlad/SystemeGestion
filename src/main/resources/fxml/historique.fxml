@@ -29,17 +29,17 @@
             <children>
 
                 <!-- onglets (même style que user-dashboard) -->
-                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
-                                prefWidth="260"
-                                prefHeight="80"
+                                prefWidth="220"
+                                prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleGoDashboard"/>
 
                         <Button text="Historique de réservation"
-                                prefWidth="260"
-                                prefHeight="80"
+                                prefWidth="220"
+                                prefHeight="70"
                                 styleClass="btn-dashboard"/>
                     </children>
                 </HBox>
@@ -49,7 +49,7 @@
            styleClass="modern-table">
 
     <columns>
-        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+        <TableColumn fx:id="colId" text="Nom complet" prefWidth="180"/>
         <TableColumn fx:id="colSalle" text="Salle" prefWidth="150"/>
         <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
         <TableColumn fx:id="colHeure" text="Horaire" prefWidth="120"/>

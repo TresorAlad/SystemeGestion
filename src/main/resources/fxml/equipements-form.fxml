@@ -30,22 +30,22 @@
                 <Insets top="24" right="24" bottom="24" left="24"/>
             </padding>
             <children>
-                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleGoDashboard"/>
                         <Button text="Historique des réservations"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleMesReservations"/>
                         <Button text="Mes salles"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleMesSalles"/>
                         <Button text="Ajouter Salle"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-dashboard"
                                 onAction="#handleAjouterSalle"/>
                     </children>

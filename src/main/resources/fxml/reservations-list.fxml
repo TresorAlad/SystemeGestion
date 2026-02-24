@@ -32,21 +32,21 @@
             <children>
 
                 <!-- nav comme sur le dashboard -->
-                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleGoDashboard"/>
                         <Button text="Historique des réservations"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-dashboard"/>
                         <Button text="Mes salles"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleMesSalles"/>
                         <Button text="Ajouter Salle"
-                                prefWidth="260" prefHeight="80"
+                                prefWidth="220" prefHeight="70"
                                 styleClass="btn-outline"
                                 onAction="#handleGoToAddSalle"/>
                     </children>
@@ -56,7 +56,7 @@
                     <children>
                         <TableView fx:id="reservationsTable" prefHeight="360" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                                <TableColumn fx:id="colId" text="Nom complet" prefWidth="180"/>
                                 <TableColumn fx:id="colSalle" text="Salle" prefWidth="180"/>
                                 <TableColumn fx:id="colDate" text="Date" prefWidth="110"/>
                                 <TableColumn fx:id="colHeure" text="Horaire" prefWidth="160"/>

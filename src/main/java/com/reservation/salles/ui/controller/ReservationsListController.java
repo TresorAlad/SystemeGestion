@@ -58,7 +58,7 @@ public class ReservationsListController {
         if (colSalle != null) {
             if (colId != null) {
                 colId.setCellValueFactory(cell -> new SimpleStringProperty(
-                        cell.getValue() != null ? String.valueOf(cell.getValue().getIdReservation()) : ""));
+                        cell.getValue() != null ? cell.getValue().getNomReservataire() : ""));
             }
             colSalle.setCellValueFactory(cell -> new SimpleStringProperty(
                     (cell.getValue() != null && cell.getValue().getSalle() != null)
@@ -106,7 +106,8 @@ public class ReservationsListController {
             });
 
             colId.setCellValueFactory(
-                    cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getIdReservation())));
+                    cell -> new SimpleStringProperty(
+                            cell.getValue() != null ? cell.getValue().getNomReservataire() : ""));
 
             colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
                 private final Button detailBtn = new Button("Détails");
@@ -126,24 +127,18 @@ public class ReservationsListController {
                     detailBtn.getStyleClass().setAll("secondary-button");
                     detailBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
                     detailBtn.setOnAction(event -> {
-                        String msg = String.format("Détails de la réservation #%d :\n" +
-                                "Client : %s\n" +
-                                "Salle : %s\n" +
-                                "Date : %s\n" +
-                                "Horaire : %s - %s\n" +
-                                "Nom réservataire : %s\n" +
+                        String msg = String.format("Détails de la réservation :\n" +
+                                "Nom : %s\n" +
                                 "Téléphone : %s\n" +
                                 "Objet : %s\n" +
-                                "Statut : %s",
-                                r.getIdReservation(),
-                                r.getUtilisateur() != null ? r.getUtilisateur().getNom() : "Inconnu",
-                                r.getSalle().getNom(),
-                                r.getDate(),
-                                r.getHeureDebut(), r.getHeureFin(),
-                                r.getNomReservataire(),
-                                r.getTelephone(),
-                                r.getObjet(),
-                                r.getStatut());
+                                "Salle : %s\n" +
+                                "Créneau : %s - %s",
+                                r.getNomReservataire() != null ? r.getNomReservataire() : "N/A",
+                                r.getTelephone() != null ? r.getTelephone() : "N/A",
+                                r.getObjet() != null ? r.getObjet() : "N/A",
+                                r.getSalle() != null ? r.getSalle().getNom() : "Inconnue",
+                                r.getHeureDebut() != null ? r.getHeureDebut() : "?",
+                                r.getHeureFin() != null ? r.getHeureFin() : "?");
                         NotificationUtil.showPage(reservationsTable, "Détails de réservation", msg, currentUser, true);
                     });
 

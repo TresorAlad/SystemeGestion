@@ -31,13 +31,27 @@
                 <Insets topRightBottomLeft="32"/>
             </padding>
             <children>
-                <!-- nav comme sur les autres pages utilisateur -->
-                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="nav-bar">
+                <!-- Navigation pour l'utilisateur -->
+                <HBox fx:id="userNav" spacing="8" alignment="CENTER" styleClass="nav-bar" managed="false" visible="false">
                     <children>
                         <Button text="Tableau de bord" onAction="#handleGoDashboard"
-                                styleClass="nav-pill"/>
-                        <Button text="Historique des réservations" onAction="#handleGoHistorique"
-                                styleClass="nav-pill"/>
+                                prefWidth="220" prefHeight="70" styleClass="btn-outline"/>
+                        <Button text="Historique de réservation" onAction="#handleGoHistorique"
+                                prefWidth="220" prefHeight="70" styleClass="btn-outline"/>
+                    </children>
+                </HBox>
+
+                <!-- Navigation pour le gestionnaire -->
+                <HBox fx:id="managerNav" spacing="8" alignment="CENTER" styleClass="nav-bar" managed="false" visible="false">
+                    <children>
+                        <Button text="Tableau de bord" onAction="#handleGoDashboard"
+                                prefWidth="220" prefHeight="70" styleClass="btn-outline"/>
+                        <Button text="Historique de réservation" onAction="#handleGoHistorique"
+                                prefWidth="220" prefHeight="70" styleClass="btn-outline"/>
+                        <Button text="Mes salles" onAction="#handleGoMesSalles"
+                                prefWidth="220" prefHeight="70" styleClass="btn-outline"/>
+                        <Button text="Ajouter Salle" onAction="#handleGoAddSalle"
+                                prefWidth="220" prefHeight="70" styleClass="btn-outline"/>
                     </children>
                 </HBox>
 
@@ -93,4 +107,3 @@
         </VBox>
     </center>
 </BorderPane>
-

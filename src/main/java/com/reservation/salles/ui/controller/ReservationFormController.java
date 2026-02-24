@@ -39,6 +39,10 @@ public class ReservationFormController {
     private TextField telephoneField;
     @FXML
     private TextField objetField;
+    @FXML
+    private javafx.scene.layout.HBox userNav;
+    @FXML
+    private javafx.scene.layout.HBox managerNav;
 
     private Utilisateur currentUser;
     private Salle salle;
@@ -51,6 +55,18 @@ public class ReservationFormController {
         this.salleLabel.setText(salle.getNom());
         if (currentUserLabel != null && utilisateur != null) {
             currentUserLabel.setText(utilisateur.getNom());
+        }
+
+        if (utilisateur != null) {
+            boolean isManager = utilisateur.estGestionnaire();
+            if (userNav != null) {
+                userNav.setVisible(!isManager);
+                userNav.setManaged(!isManager);
+            }
+            if (managerNav != null) {
+                managerNav.setVisible(isManager);
+                managerNav.setManaged(isManager);
+            }
         }
     }
 
@@ -182,6 +198,41 @@ public class ReservationFormController {
     @FXML
     private void handleGoDashboard() {
         retourDashboard();
+    }
+
+    @FXML
+    private void handleGoMesSalles() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager-rooms.fxml"));
+            Parent root = loader.load();
+            ManagerRoomsController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) salleLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGoAddSalle() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/salle-form.fxml"));
+            Parent root = loader.load();
+            SalleFormController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+            controller.setSalle(null);
+
+            Stage stage = (Stage) salleLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

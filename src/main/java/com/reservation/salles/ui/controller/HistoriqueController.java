@@ -58,7 +58,7 @@ public class HistoriqueController {
             reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
             colId.setCellValueFactory(
                     cell -> new SimpleStringProperty(
-                            cell.getValue() != null ? String.valueOf(cell.getValue().getIdReservation()) : ""));
+                            cell.getValue() != null ? cell.getValue().getNomReservataire() : ""));
             colSalle.setCellValueFactory(cell -> new SimpleStringProperty(
                     (cell.getValue() != null && cell.getValue().getSalle() != null)
                             ? cell.getValue().getSalle().getNom()
@@ -123,19 +123,18 @@ public class HistoriqueController {
                     detailBtn.getStyleClass().setAll("secondary-button");
                     detailBtn.setStyle("-fx-padding: 4 12 4 12; -fx-font-size: 11px;");
                     detailBtn.setOnAction(event -> {
-                        String msg = String.format("Détails de la réservation #%d :\n" +
-                                "Client : %s\n" +
+                        String msg = String.format("Détails de la réservation :\n" +
+                                "Nom : %s\n" +
+                                "Téléphone : %s\n" +
+                                "Objet : %s\n" +
                                 "Salle : %s\n" +
-                                "Date : %s\n" +
-                                "Horaire : %s - %s\n" +
-                                "Statut : %s",
-                                r.getIdReservation(),
-                                r.getUtilisateur() != null ? r.getUtilisateur().getNom() : "Inconnu",
+                                "Créneau : %s - %s",
+                                r.getNomReservataire() != null ? r.getNomReservataire() : "N/A",
+                                r.getTelephone() != null ? r.getTelephone() : "N/A",
+                                r.getObjet() != null ? r.getObjet() : "N/A",
                                 r.getSalle() != null ? r.getSalle().getNom() : "Inconnue",
-                                r.getDate() != null ? r.getDate() : "Non définie",
                                 r.getHeureDebut() != null ? r.getHeureDebut() : "?",
-                                r.getHeureFin() != null ? r.getHeureFin() : "?",
-                                r.getStatut() != null ? r.getStatut() : "Inconnu");
+                                r.getHeureFin() != null ? r.getHeureFin() : "?");
                         NotificationUtil.showPage(reservationsTable, "Détails de réservation", msg, currentUser, true);
                     });
 
