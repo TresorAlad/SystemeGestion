@@ -6,17 +6,18 @@ Application desktop JavaFX pour gérer la réservation de salles et équipements
 
 ## Technologies
 
-- **Java 17**
-- **JavaFX 23**
-- **Maven**
-- **SQLite**
+* **Java 17**
+* **JavaFX 23**
+* **Maven**
+* **SQLite**
 
 ---
 
 ## Prérequis
 
-- JDK 17+
-- Maven 3.6+
+* JDK 17+
+* Maven 3.6+
+* SQLite
 
 ---
 
@@ -29,13 +30,23 @@ git clone https://github.com/tresor228/SystemeGestion.git
 cd SystemeGestion
 ```
 
-### 2. Compiler
+### 2. Initialiser la base de données
+
+Avant de compiler le projet, créez et initialisez la base SQLite avec le schéma fourni :
+
+```bash
+sqlite3 reservation.db < schema.sql
+```
+
+> Cela créera le fichier `reservation.db` et toutes les tables nécessaires.
+
+### 3. Compiler le projet
 
 ```bash
 mvn clean compile
 ```
 
-### 3. Lancer l'application
+### 4. Lancer l'application
 
 ```bash
 mvn javafx:run
@@ -45,14 +56,14 @@ mvn javafx:run
 
 ## Base de données
 
-- **SQLite** : fichier `reservation.db` (créé automatiquement au premier lancement)
-- Script d'initialisation : `schema.sql`
+* **SQLite** : fichier `reservation.db`
+* Script d'initialisation : `schema.sql`
 
 ### Comptes par défaut
 
-| Rôle       | Email           | Mot de passe |
-|------------|-----------------|--------------|
-| Utilisateur | user@esgis.org | password     |
+| Rôle         | Email                                     | Mot de passe |
+| ------------ | ----------------------------------------- | ------------ |
+| Utilisateur  | user@esgis.org  | password     |
 | Gestionnaire | admin@esgis.org | admin        |
 
 ---
@@ -79,15 +90,22 @@ SystemeGestion/
 
 ## Fonctionnalités principales
 
-- **Utilisateur** : réserver des salles, consulter ses réservations
-- **Gestionnaire** : gérer salles, équipements, valider/rejeter les demandes et réservations
+* **Utilisateur** :
+
+  * Réserver des salles
+  * Consulter ses réservations
+
+* **Gestionnaire** :
+
+  * Gérer les salles et équipements
+  * Valider ou rejeter les demandes et réservations
 
 ---
 
 ## Réinitialiser la base de données
 
+Pour réinitialiser complètement la base :
+
 ```bash
 sqlite3 reservation.db < schema.sql
 ```
-
-Fin

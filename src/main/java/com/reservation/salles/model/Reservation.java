@@ -3,6 +3,11 @@ package com.reservation.salles.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Représente une réservation de salle dans le système.
+ * Contient les informations sur le créneau horaire, la salle, l'utilisateur et
+ * le statut.
+ */
 public class Reservation {
 
     private int idReservation;
@@ -11,7 +16,7 @@ public class Reservation {
     private LocalDate date;
     private LocalTime heureDebut;
     private LocalTime heureFin;
-    private String statut;
+    private String statut; // EN_ATTENTE, VALIDEE, REJETEE, ANNULEE
     private String nomReservataire;
     private String telephone;
     private String objet;
@@ -19,6 +24,9 @@ public class Reservation {
     public Reservation() {
     }
 
+    /**
+     * Constructeur complet pour une réservation.
+     */
     public Reservation(int idReservation,
             Utilisateur utilisateur,
             Salle salle,
@@ -41,6 +49,7 @@ public class Reservation {
         this.objet = objet;
     }
 
+    // Getters et Setters standard
     public int getIdReservation() {
         return idReservation;
     }
@@ -121,6 +130,9 @@ public class Reservation {
         this.objet = objet;
     }
 
+    /**
+     * Marque la réservation comme annulée.
+     */
     public void annuler() {
         this.statut = "ANNULEE";
     }

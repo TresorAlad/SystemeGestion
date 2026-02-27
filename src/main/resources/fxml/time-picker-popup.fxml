@@ -4,17 +4,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
+<!--
+    Sélecteur d'heure personnalisé (Popup).
+    Permet de choisir l'heure et les minutes via des Spinners.
+-->
 <VBox fx:id="pickerRoot" styleClass="time-picker-dialog" spacing="0" xmlns:fx="http://javafx.com/fxml" 
       fx:controller="com.reservation.salles.ui.controller.TimePickerController">
     
+    <!-- En-tête du sélecteur -->
     <VBox styleClass="time-picker-header">
         <Label text="Définir l'heure" />
     </VBox>
 
+    <!-- Corps contenant les sélecteurs d'heure et minute -->
     <HBox styleClass="time-picker-body">
         <Spinner fx:id="hourSpinner" styleClass="time-spinner">
             <valueFactory>
-                <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="12" initialValue="8" amountToStepBy="1" wrapAround="true"/>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23" initialValue="8" amountToStepBy="1" wrapAround="true"/>
             </valueFactory>
         </Spinner>
         
@@ -27,6 +33,7 @@
         </Spinner>
     </HBox>
 
+    <!-- Pied de page avec boutons d'action -->
     <HBox styleClass="time-picker-footer">
         <Button text="Annuler" onAction="#handleCancel" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
         <Button text="Effacer" onAction="#handleClear" HBox.hgrow="ALWAYS" maxWidth="Infinity" />

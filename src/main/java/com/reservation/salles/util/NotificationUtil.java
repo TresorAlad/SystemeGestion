@@ -7,8 +7,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Utilitaire pour l'affichage des notifications et des changements de pages
+ * dans l'interface utilisateur JavaFX.
+ */
 public class NotificationUtil {
 
+    /**
+     * Affiche une page de notification (Succès ou Erreur) en fonction du paramètre
+     * success.
+     */
     public static void showPage(javafx.scene.Node node, String title, String description,
             com.reservation.salles.model.Utilisateur user, boolean success) {
         if (node == null || node.getScene() == null || node.getScene().getWindow() == null) {
@@ -23,6 +31,9 @@ public class NotificationUtil {
         }
     }
 
+    /**
+     * Charge et affiche la vue de notification en mode Succès.
+     */
     public static void showSuccess(Stage stage, String title, String description,
             com.reservation.salles.model.Utilisateur user) {
         try {
@@ -41,6 +52,9 @@ public class NotificationUtil {
         }
     }
 
+    /**
+     * Charge et affiche la vue de notification en mode Erreur.
+     */
     public static void showError(Stage stage, String title, String description,
             com.reservation.salles.model.Utilisateur user) {
         try {
@@ -59,14 +73,23 @@ public class NotificationUtil {
         }
     }
 
+    /**
+     * Affiche un message d'information dans la console.
+     */
     public static void info(String message) {
         System.out.println("INFO: " + message);
     }
 
+    /**
+     * Affiche un message de succès dans la console.
+     */
     public static void succes(String message) {
         System.out.println("SUCCESS: " + message);
     }
 
+    /**
+     * Affiche un message d'erreur dans la console d'erreurs.
+     */
     public static void erreur(String message) {
         System.err.println("ERROR: " + message);
     }

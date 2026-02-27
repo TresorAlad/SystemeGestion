@@ -15,11 +15,18 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object pour la gestion des réservations.
+ * Gère toutes les opérations SQL liées à la table 'reservations'.
+ */
 public class ReservationDAO {
 
     private final UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
     private final SalleDAO salleDAO = new SalleDAO();
 
+    /**
+     * Enregistre une nouvelle réservation dans la base de données.
+     */
     public Reservation save(Reservation r) {
         String sql = "INSERT INTO reservations (id_utilisateur, id_salle, date, heure_debut, heure_fin, statut, nom_reservataire, telephone, objet) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -48,6 +55,9 @@ public class ReservationDAO {
         return r;
     }
 
+    /**
+     * Met à jour le statut d'une réservation (VALIDEE, REJETEE, ANNULEE).
+     */
     public void updateStatut(int idReservation, String statut) {
         String sql = "UPDATE reservations SET statut = ? WHERE id_reservation = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -61,6 +71,9 @@ public class ReservationDAO {
         }
     }
 
+    /**
+     * Récupère toutes les réservations triées par date.
+     */
     public List<Reservation> findAll() {
         List<Reservation> result = new ArrayList<>();
         String sql = "SELECT * FROM reservations ORDER BY date DESC, heure_debut DESC";
@@ -77,6 +90,9 @@ public class ReservationDAO {
         return result;
     }
 
+    /**
+     * Liste les réservations effectuées par un utilisateur spécifique.
+     */
     public List<Reservation> findByUtilisateur(int idUtilisateur) {
         List<Reservation> result = new ArrayList<>();
         String sql = "SELECT * FROM reservations WHERE id_utilisateur = ? ORDER BY date, heure_debut";
@@ -95,6 +111,10 @@ public class ReservationDAO {
         return result;
     }
 
+    /**
+     * Vérifie si une salle est libre sur un créneau horaire donné.
+     * Prend en compte les chevauchements de plages horaires.
+     */
     public boolean isSalleDisponible(int idSalle, LocalDate date,
             LocalTime heureDebut, LocalTime heureFin) {
         String sql = "SELECT COUNT(*) FROM reservations " +
@@ -127,6 +147,38 @@ public class ReservationDAO {
         return false;
     }
 
+    /**
+     * Vérifie si la salle est actuellement occupée (à l'instant T).
+     */
+    public boolean isSalleOccupeeMaintenant(int idSalle) {
+        String sql = "SELECT COUNT(*) FROM reservations " +
+                "WHERE id_salle = ? AND date = ? " +
+                "AND statut = 'VALIDEE' " +
+                "AND heure_debut <= ? AND heure_fin >= ?";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            LocalTime now = LocalTime.now();
+            ps.setInt(1, idSalle);
+            ps.setString(2, LocalDate.now().toString());
+            ps.setString(3, now.toString());
+            ps.setString(4, now.toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Recherche une réservation par son identifiant unique.
+     */
     public Reservation findById(int idReservation) {
         String sql = "SELECT * FROM reservations WHERE id_reservation = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -144,6 +196,9 @@ public class ReservationDAO {
         return null;
     }
 
+    /**
+     * Récupère les réservations les plus récentes (limité par limit).
+     */
     public List<Reservation> findRecent(int limit) {
         List<Reservation> result = new ArrayList<>();
         String sql = "SELECT * FROM reservations ORDER BY date DESC, heure_debut DESC LIMIT ?";
@@ -162,6 +217,9 @@ public class ReservationDAO {
         return result;
     }
 
+    /**
+     * Compte le nombre de réservations ayant un statut particulier.
+     */
     public int countByStatut(String statut) {
         String sql = "SELECT COUNT(*) FROM reservations WHERE statut = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -179,6 +237,9 @@ public class ReservationDAO {
         return 0;
     }
 
+    /**
+     * Transforme une ligne de ResultSet en objet Reservation.
+     */
     private Reservation map(ResultSet rs) throws SQLException {
         int idReservation = rs.getInt("id_reservation");
         int idUtilisateur = rs.getInt("id_utilisateur");

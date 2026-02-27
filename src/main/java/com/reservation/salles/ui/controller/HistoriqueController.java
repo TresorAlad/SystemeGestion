@@ -20,6 +20,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+/**
+ * Contrôleur pour la vue Historique des réservations d'un utilisateur.
+ * Affiche une TableView avec les détails des réservations et permet
+ * l'annulation.
+ */
 public class HistoriqueController {
 
     @FXML
@@ -44,6 +49,10 @@ public class HistoriqueController {
     private final ReservationService reservationService = new ReservationService();
     private final ObservableList<Reservation> reservations = FXCollections.observableArrayList();
 
+    /**
+     * Initialise le contrôleur avec l'utilisateur actuel et charge ses
+     * réservations.
+     */
     public void initData(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
         if (currentUserLabel != null && utilisateur != null) {
@@ -52,6 +61,10 @@ public class HistoriqueController {
         chargerReservations();
     }
 
+    /**
+     * Configure les colonnes de la TableView (CellValueFactories et CellFactories
+     * pour le design).
+     */
     @FXML
     private void initialize() {
         if (colSalle != null) {
@@ -104,7 +117,7 @@ public class HistoriqueController {
                 }
             });
 
-            // Colonne Actions avec boutons
+            // Colonne Actions avec boutons (Détails et Annulation)
             colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
                 private final Button detailBtn = new Button("Détails");
                 private final Button annulerBtn = new Button("Annuler");
@@ -155,7 +168,7 @@ public class HistoriqueController {
                         }
                     });
 
-                    // On n'affiche le bouton annuler que si c'est possible
+                    // Visibilité du bouton d'annulation
                     if ("VALIDEE".equals(r.getStatut()) || "EN_ATTENTE".equals(r.getStatut())) {
                         annulerBtn.setVisible(true);
                     } else {
@@ -170,6 +183,10 @@ public class HistoriqueController {
         }
     }
 
+    /**
+     * Charge les réservations depuis le service en fonction des droits de
+     * l'utilisateur.
+     */
     private void chargerReservations() {
         if (currentUser != null) {
             try {
@@ -186,6 +203,9 @@ public class HistoriqueController {
         }
     }
 
+    /**
+     * Gère l'annulation d'une réservation sélectionnée dans la table.
+     */
     @FXML
     private void handleAnnuler() {
         Reservation selected = reservationsTable.getSelectionModel().getSelectedItem();
@@ -224,6 +244,9 @@ public class HistoriqueController {
         }
     }
 
+    /**
+     * Retourne vers l'accueil correspondant au rôle de l'utilisateur.
+     */
     @FXML
     private void handleRetour() {
         if (currentUser == null)

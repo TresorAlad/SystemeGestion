@@ -4,11 +4,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
+<!--
+    Tableau de bord du Gestionnaire.
+    Présente des statistiques globales et la liste des réservations récentes pour validation.
+-->
 <BorderPane fx:controller="com.reservation.salles.ui.controller.ManagerDashboardController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
             styleClass="root-pane">
 
+    <!-- Barre supérieure : Titre et Profil -->
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
@@ -24,6 +29,7 @@
         </HBox>
     </top>
 
+    <!-- Contenu central -->
     <center>
         <VBox spacing="24">
             <padding>
@@ -31,6 +37,7 @@
             </padding>
             <children>
 
+                <!-- Menu de navigation principal du gestionnaire -->
                 <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
@@ -58,7 +65,7 @@
                     </children>
                 </HBox>
 
-                <!-- Cartes statistiques -->
+                <!-- Section des statistiques rapides (Compteurs) -->
                 <HBox spacing="16">
                     <children>
                         <VBox spacing="8" styleClass="card">
@@ -79,7 +86,7 @@
                     </children>
                 </HBox>
 
-                <!-- Tableau des réservations récentes -->
+                <!-- Liste des dernières réservations soumises -->
                 <VBox spacing="12" styleClass="card">
                     <children>
                         <Label text="Réservations récentes" styleClass="section-title"/>

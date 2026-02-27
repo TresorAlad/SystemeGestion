@@ -7,6 +7,11 @@ import javafx.stage.Popup;
 import java.time.LocalTime;
 import javafx.util.StringConverter;
 
+/**
+ * Contrôleur pour le sélecteur d'heure personnalisé (TimePicker).
+ * Utilisé comme popup pour faciliter la saisie des horaires sans erreur de
+ * format.
+ */
 public class TimePickerController {
 
     @FXML
@@ -19,6 +24,7 @@ public class TimePickerController {
 
     @FXML
     public void initialize() {
+        // Formatteur pour afficher toujours 2 chiffres (01, 02, etc.)
         StringConverter<Integer> twoDigitConverter = new StringConverter<>() {
             @Override
             public String toString(Integer value) {
@@ -38,11 +44,14 @@ public class TimePickerController {
         minuteSpinner.getValueFactory().setConverter(twoDigitConverter);
     }
 
+    /**
+     * Initialise le popup avec le champ de texte cible.
+     * Tente de pré-remplir les spinners si une heure est déjà présente.
+     */
     public void init(Popup popup, TextField targetField) {
         this.popup = popup;
         this.targetField = targetField;
 
-        // Tenter d'extraire l'heure actuelle du champ cible
         try {
             String text = targetField.getText().replace(" ", "");
             if (!text.isEmpty() && text.contains(":")) {
@@ -59,12 +68,18 @@ public class TimePickerController {
         popup.hide();
     }
 
+    /**
+     * Vide le champ de texte cible.
+     */
     @FXML
     private void handleClear() {
         targetField.setText("");
         popup.hide();
     }
 
+    /**
+     * Envoie l'heure sélectionnée au format "HH : mm" vers le champ cible.
+     */
     @FXML
     private void handleSet() {
         int h = hourSpinner.getValue();

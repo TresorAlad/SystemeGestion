@@ -13,15 +13,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO pour la gestion des demandes (création, modification, suppression de
+ * réservation).
+ */
 public class DemandeDAO {
 
     private final ReservationDAO reservationDAO = new ReservationDAO();
 
+    /**
+     * Enregistre une nouvelle demande dans la base de données.
+     */
     public Demande save(Demande d) {
         String sql = "INSERT INTO demandes (id_reservation, type_demande, date_demande, statut) "
                 + "VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, d.getReservation().getIdReservation());
             ps.setString(2, d.getTypeDemande());
@@ -40,10 +47,13 @@ public class DemandeDAO {
         return d;
     }
 
+    /**
+     * Met à jour le statut d'une demande (VALIDEE, REJETEE).
+     */
     public void updateStatut(int idDemande, String statut) {
         String sql = "UPDATE demandes SET statut = ? WHERE id_demande = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, statut);
             ps.setInt(2, idDemande);
@@ -53,12 +63,15 @@ public class DemandeDAO {
         }
     }
 
+    /**
+     * Récupère toutes les demandes qui sont encore en attente de traitement.
+     */
     public List<Demande> findAllEnAttente() {
         List<Demande> result = new ArrayList<>();
         String sql = "SELECT * FROM demandes WHERE statut = 'EN_ATTENTE' ORDER BY date_demande";
         try (Connection conn = DBConnection.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 result.add(map(rs));
@@ -69,10 +82,13 @@ public class DemandeDAO {
         return result;
     }
 
+    /**
+     * Recherche une demande par son identifiant.
+     */
     public Demande findById(int idDemande) {
         String sql = "SELECT * FROM demandes WHERE id_demande = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idDemande);
             try (ResultSet rs = ps.executeQuery()) {
@@ -86,6 +102,9 @@ public class DemandeDAO {
         return null;
     }
 
+    /**
+     * Mappe une ligne de résultat SQL vers un objet Demande.
+     */
     private Demande map(ResultSet rs) throws SQLException {
         int id = rs.getInt("id_demande");
         int idReservation = rs.getInt("id_reservation");
@@ -97,4 +116,3 @@ public class DemandeDAO {
         return new Demande(id, reservation, type, dateDemande, statut);
     }
 }
-

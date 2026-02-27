@@ -35,6 +35,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Contrôleur principal pour le tableau de bord utilisateur (Vue Demandeur).
+ * Affiche la liste des salles disponibles, permet la recherche et lance le
+ * processus de réservation.
+ */
 public class UserDashboardController {
 
     @FXML
@@ -57,6 +62,9 @@ public class UserDashboardController {
     private final ObservableList<Salle> toutesLesSalles = FXCollections.observableArrayList();
     private Map<String, Integer> quantitesEquipements = new HashMap<>();
 
+    /**
+     * Initialise les données de l'utilisateur connecté et charge les salles.
+     */
     public void setCurrentUser(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
         currentUserLabel.setText(utilisateur.getNom());
@@ -66,11 +74,15 @@ public class UserDashboardController {
 
     @FXML
     private void initialize() {
+        // Mise en place de l'écouteur pour la barre de recherche
         if (searchField != null) {
             searchField.textProperty().addListener((obs, oldV, newV) -> appliquerFiltre(newV));
         }
     }
 
+    /**
+     * Récupère la liste des salles depuis le service.
+     */
     private void chargerSalles() {
         toutesLesSalles.setAll(salleService.listerToutesLesSalles());
         quantitesEquipements.clear();
@@ -82,6 +94,10 @@ public class UserDashboardController {
         }
     }
 
+    /**
+     * Filtre les salles affichées en fonction du texte saisi dans la barre de
+     * recherche.
+     */
     private void appliquerFiltre(String texte) {
         if (texte == null || texte.isBlank()) {
             rafraichirCartes(toutesLesSalles);
@@ -95,6 +111,9 @@ public class UserDashboardController {
         rafraichirCartes(FXCollections.observableArrayList(filtre));
     }
 
+    /**
+     * Met à jour l'affichage des cartes de salles dans le FlowPane.
+     */
     private void rafraichirCartes(List<Salle> salles) {
         if (sallesFlow == null)
             return;
@@ -104,6 +123,9 @@ public class UserDashboardController {
         }
     }
 
+    /**
+     * Crée graphiquement une "carte" (VBox) pour représenter une salle.
+     */
     private VBox creerCarteSalle(Salle salle) {
         VBox card = new VBox(8);
         card.getStyleClass().add("room-card");
@@ -126,9 +148,14 @@ public class UserDashboardController {
         clip.setArcHeight(16);
         imageView.setClip(clip);
 
-        Label badge = new Label(salle.isDisponible() ? "Disponible" : "Indisponible");
-        badge.getStyleClass().addAll("availability-badge",
-                salle.isDisponible() ? "availability-badge-on" : "availability-badge-off");
+        // Gestion de l'affichage du statut Occupation/Disponibilité
+        boolean occupee = salleService.estOccupeeMaintenant(salle.getIdSalle());
+        String texteStatut = !salle.isDisponible() ? "Indisponible" : (occupee ? "Occupé" : "Disponible");
+        String cssStatut = !salle.isDisponible() ? "availability-badge-off"
+                : (occupee ? "availability-badge-occupied" : "availability-badge-on");
+
+        Label badge = new Label(texteStatut);
+        badge.getStyleClass().addAll("availability-badge", cssStatut);
         StackPane.setAlignment(badge, Pos.TOP_RIGHT);
         StackPane.setMargin(badge, new Insets(8, 8, 0, 0));
 
@@ -145,10 +172,13 @@ public class UserDashboardController {
 
         HBox chips = new HBox(6);
         chips.setAlignment(Pos.CENTER);
-        chips.getChildren().addAll(
-                creerChipAvecQuantite("Projecteur"),
-                creerChipAvecQuantite("WiFi"),
-                creerChipAvecQuantite("PC"));
+
+        // On récupère les équipements de la salle (limité à 4 pour le design)
+        List<Equipement> equips = salle.getEquipements();
+        for (int i = 0; i < Math.min(equips.size(), 4); i++) {
+            Equipement eq = equips.get(i);
+            chips.getChildren().add(creerChipEquipement(eq));
+        }
 
         Button reserverBtn = new Button("Réserver");
         reserverBtn.getStyleClass().add("primary-button");
@@ -159,14 +189,19 @@ public class UserDashboardController {
         return card;
     }
 
-    private Label creerChipAvecQuantite(String nomEquipement) {
-        int qte = quantitesEquipements.getOrDefault(nomEquipement, 0);
-        String texte = qte > 0 ? nomEquipement + " (" + qte + ")" : nomEquipement;
+    /**
+     * Crée un badge ("chip") visuel pour un équipement donné.
+     */
+    private Label creerChipEquipement(Equipement eq) {
+        String texte = eq.getNom() + " (" + eq.getQuantite() + ")";
         Label chip = new Label(texte);
         chip.getStyleClass().add("room-chip");
         return chip;
     }
 
+    /**
+     * Ouvre l'écran du formulaire de réservation pour la salle sélectionnée.
+     */
     private void ouvrirReservation(Salle salle) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reservation-form.fxml"));
@@ -185,6 +220,9 @@ public class UserDashboardController {
         }
     }
 
+    /**
+     * Redirige vers la page d'historique des réservations.
+     */
     @FXML
     private void handleMesReservations() {
         try {
@@ -204,19 +242,14 @@ public class UserDashboardController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            String errMsg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-            System.err.println("ERREUR DÉTAILLÉE: " + errMsg);
-            // On affiche l'erreur complète pour aider au débogage
             NotificationUtil.showPage(sallesFlow, "Erreur système",
                     "Impossible d'accéder à vos réservations pour le moment.", currentUser, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("EXCEPTION GENERALE: " + e.getClass().getName() + ": " + e.getMessage());
-            NotificationUtil.showPage(sallesFlow, "Erreur inattendue",
-                    "Un problème technique empêche l'affichage de cette page.", currentUser, false);
         }
     }
 
+    /**
+     * Redirige vers la page de profil.
+     */
     @FXML
     private void handleProfile() {
         try {
@@ -234,6 +267,9 @@ public class UserDashboardController {
         }
     }
 
+    /**
+     * Déconnecte l'utilisateur actuel.
+     */
     @FXML
     private void handleLogout() {
         try {
@@ -255,18 +291,13 @@ public class UserDashboardController {
 
     @FXML
     private void goToDashboard(ActionEvent event) throws IOException {
-        if (event == null) {
+        if (event == null)
             return;
-        }
         Node source = (Node) event.getSource();
-        if (source == null || source.getScene() == null) {
+        if (source == null || source.getScene() == null)
             return;
-        }
-        Stage stage = (Stage) source.getScene().getWindow();
-        if (stage == null) {
-            return;
-        }
 
+        Stage stage = (Stage) source.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user-dashboard.fxml"));
         Parent root = loader.load();
         UserDashboardController controller = loader.getController();

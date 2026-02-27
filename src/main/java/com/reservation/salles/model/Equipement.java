@@ -1,5 +1,8 @@
 package com.reservation.salles.model;
 
+/**
+ * Représente un équipement (ex: Projecteur, Tableau, etc.) associé à une salle.
+ */
 public class Equipement {
 
     private int idEquipement;
@@ -9,12 +12,16 @@ public class Equipement {
     public Equipement() {
     }
 
+    /**
+     * Constructeur pour un équipement avec son nom et sa quantité initiale.
+     */
     public Equipement(int idEquipement, String nom, int quantite) {
         this.idEquipement = idEquipement;
         this.nom = nom;
         this.quantite = quantite;
     }
 
+    // Getters et Setters standard
     public int getIdEquipement() {
         return idEquipement;
     }
@@ -44,4 +51,3 @@ public class Equipement {
         return nom + " (" + quantite + ")";
     }
 }
-

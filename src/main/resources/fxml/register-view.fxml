@@ -4,11 +4,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Vue d'inscription (Register).
+    Permet à un nouvel utilisateur de créer son compte en saisissant son nom, email et mot de passe.
+-->
 <AnchorPane fx:controller="com.reservation.salles.ui.controller.RegisterController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
             styleClass="root-pane">
     <children>
+        <!-- Formulaire d'inscription -->
         <VBox spacing="14" alignment="CENTER"
               AnchorPane.topAnchor="70" AnchorPane.leftAnchor="220"
               AnchorPane.rightAnchor="220" AnchorPane.bottomAnchor="70"
@@ -21,6 +26,7 @@
                 <Label text="Inscription utilisateur"
                        styleClass="login-subtitle"/>
 
+                <!-- Champs d'information personnelle -->
                 <Label text="Nom complet"/>
                 <TextField fx:id="fullNameField"
                            promptText="Votre nom"
@@ -33,6 +39,7 @@
                            maxWidth="340"
                            styleClass="text-input"/>
 
+                <!-- Champ mot de passe avec confirmation -->
                 <StackPane maxWidth="340">
                     <children>
                         <PasswordField fx:id="passwordField" promptText="******"
@@ -57,8 +64,10 @@
                     </children>
                 </StackPane>
 
+                <!-- Zone de message d'erreur -->
                 <Label fx:id="errorLabel" textFill="red"/>
 
+                <!-- Actions d'inscription et retour -->
                 <HBox spacing="10" alignment="CENTER">
                     <children>
                         <Button text="Retour"

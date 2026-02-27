@@ -18,6 +18,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Contrôleur pour le formulaire de création ou modification d'une salle.
+ * Gère également l'upload d'image pour illustrer la salle.
+ */
 public class SalleFormController {
 
     @FXML
@@ -37,6 +41,9 @@ public class SalleFormController {
     private com.reservation.salles.model.Utilisateur currentUser;
     private Salle salleAmodifier;
 
+    /**
+     * Initialise le formulaire en mode édition si une salle est fournie.
+     */
     public void setSalle(Salle salle) {
         this.salleAmodifier = salle;
         if (salle != null) {
@@ -57,6 +64,10 @@ public class SalleFormController {
         }
     }
 
+    /**
+     * Gère la sélection d'une image locale et sa copie dans le dossier 'photos' du
+     * projet.
+     */
     @FXML
     private void handleChoisirPhoto() {
         FileChooser fileChooser = new FileChooser();
@@ -69,7 +80,7 @@ public class SalleFormController {
             return;
         }
         try {
-            // dossier de destination dans le projet
+            // Dossier de destination relatif au projet
             Path photosDir = Path.of("photos");
             if (!Files.exists(photosDir)) {
                 Files.createDirectories(photosDir);
@@ -77,7 +88,7 @@ public class SalleFormController {
             String targetName = "salle_" + System.currentTimeMillis() + "_" + file.getName();
             Path target = photosDir.resolve(targetName);
             Files.copy(file.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
-            photoRelativePath = target.toString(); // ex: photos/salle_xxx.jpg
+            photoRelativePath = target.toString(); // ex: photos/salle_123.jpg
             if (photoPathLabel != null) {
                 photoPathLabel.setText(targetName);
             }
@@ -88,6 +99,9 @@ public class SalleFormController {
         }
     }
 
+    /**
+     * Valide les données de la salle et passe à l'étape suivante (Equipements).
+     */
     @FXML
     private void handleSuivant() {
         String nom = nomField.getText();
@@ -118,7 +132,7 @@ public class SalleFormController {
             salleToProcess = salleAmodifier;
         }
 
-        // Aller vers l'écran d'équipements
+        // Redirection vers le formulaire des équipements
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/equipements-form.fxml"));
             Parent root = loader.load();

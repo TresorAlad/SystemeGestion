@@ -4,11 +4,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Vue du Profil Utilisateur.
+    Permet de modifier ses informations (nom, mot de passe) et offre des options d'administration pour les gestionnaires.
+-->
 <BorderPane fx:controller="com.reservation.salles.ui.controller.ProfilController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
             styleClass="root-pane">
 
+    <!-- Barre supérieure : Titre et Retour -->
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
@@ -23,6 +28,7 @@
         </HBox>
     </top>
 
+    <!-- Contenu central du profil -->
     <center>
         <VBox spacing="24">
             <padding>
@@ -31,7 +37,7 @@
             <children>
                 <HBox spacing="24">
                     <children>
-                        <!-- Informations Personnelles -->
+                        <!-- Section : Modification des informations personnelles -->
                         <VBox spacing="16" styleClass="card" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="Informations personnelles" styleClass="section-title"/>
@@ -47,6 +53,7 @@
                                         <Label text="Email (non modifiable) :" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
                                         <Label fx:id="emailLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
+                                        <!-- Champ de changement de mot de passe -->
                                         <Label text="Nouveau mot de passe :" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
                                         <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1">
                                             <children>
@@ -64,7 +71,7 @@
                             </children>
                         </VBox>
 
-                        <!-- Section Administration (Visible uniquement pour les Managers) -->
+                        <!-- Section Administration (Affichée conditionnellement pour les gestionnaires) -->
                         <VBox fx:id="adminSection" spacing="16" styleClass="card" HBox.hgrow="ALWAYS" visible="false">
                             <children>
                                 <Label text="Gestion des utilisateurs (Admin)" styleClass="section-title"/>

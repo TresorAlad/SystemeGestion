@@ -16,6 +16,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Contrôleur pour l'écran d'inscription.
+ * Gère la validation et la création de nouveaux comptes utilisateurs.
+ */
 public class RegisterController {
 
     @FXML
@@ -38,6 +42,10 @@ public class RegisterController {
 
     private final UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
 
+    /**
+     * Valide les champs et enregistre le nouvel utilisateur dans la base de
+     * données.
+     */
     @FXML
     private void handleRegister(ActionEvent event) {
         String nom = fullNameField.getText() == null ? "" : fullNameField.getText().trim();
@@ -72,6 +80,9 @@ public class RegisterController {
                 null);
     }
 
+    /**
+     * Bascule l'affichage du champ mot de passe.
+     */
     @FXML
     private void togglePassword() {
         if (isPasswordVisible) {
@@ -91,6 +102,9 @@ public class RegisterController {
         }
     }
 
+    /**
+     * Bascule l'affichage du champ de confirmation du mot de passe.
+     */
     @FXML
     private void toggleConfirmPassword() {
         if (isConfirmVisible) {
@@ -110,6 +124,9 @@ public class RegisterController {
         }
     }
 
+    /**
+     * Redirige l'utilisateur vers l'écran de connexion.
+     */
     @FXML
     private void handleGoToLogin(ActionEvent event) {
         if (event == null) {

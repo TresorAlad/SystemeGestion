@@ -21,6 +21,10 @@ import java.time.format.DateTimeParseException;
 import javafx.stage.Popup;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Contrôleur pour le formulaire de prise de réservation.
+ * Gère la sélection de la date, de l'heure et des informations de contact.
+ */
 public class ReservationFormController {
 
     @FXML
@@ -49,6 +53,11 @@ public class ReservationFormController {
 
     private final ReservationService reservationService = new ReservationService();
 
+    /**
+     * Initialise les données du formulaire pour une salle spécifique et un
+     * utilisateur donné.
+     * Configure la barre de navigation selon le rôle.
+     */
     public void initData(Utilisateur utilisateur, Salle salle) {
         this.currentUser = utilisateur;
         this.salle = salle;
@@ -72,20 +81,22 @@ public class ReservationFormController {
 
     @FXML
     public void initialize() {
-        // Rendre les champs non édifiables pour forcer l'utilisation du picker
+        // Rendre les champs non édifiables pour forcer l'usage du TimePicker graphique
         heureDebutField.setEditable(false);
         heureFinField.setEditable(false);
 
-        // Ouvrir le picker au clic
+        // Association du clic à l'ouverture du popup de sélection de l'heure
         heureDebutField.setOnMouseClicked(this::showTimePicker);
         heureFinField.setOnMouseClicked(this::showTimePicker);
 
-        // Valeur par défaut pour la date (aujourd'hui)
         if (datePicker != null) {
             datePicker.setValue(LocalDate.now());
         }
     }
 
+    /**
+     * Affiche un sélecteur d'heure personnalisé sous forme de Popup.
+     */
     private void showTimePicker(MouseEvent event) {
         TextField field = (TextField) event.getSource();
         try {
@@ -99,7 +110,7 @@ public class ReservationFormController {
             TimePickerController controller = loader.getController();
             controller.init(popup, field);
 
-            // Positionnement juste au-dessous du champ
+            // Positionnement dynamique
             double x = field.localToScreen(0, 0).getX();
             double y = field.localToScreen(0, 0).getY() + field.getHeight();
             popup.show(field.getScene().getWindow(), x, y);
@@ -109,6 +120,9 @@ public class ReservationFormController {
         }
     }
 
+    /**
+     * Valide la saisie et crée la réservation (ou la demande de réservation).
+     */
     @FXML
     private void handleValider() {
         LocalDate date = datePicker.getValue();
@@ -144,6 +158,7 @@ public class ReservationFormController {
                 return;
             }
 
+            // Message de succès adapté selon le rôle
             if (currentUser.estGestionnaire()) {
                 NotificationUtil.showSuccess(
                         (javafx.stage.Stage) salleLabel.getScene().getWindow(),
@@ -170,6 +185,9 @@ public class ReservationFormController {
         retourDashboard();
     }
 
+    /**
+     * Redirige l'utilisateur vers son tableau de bord respectif.
+     */
     private void retourDashboard() {
         try {
             boolean isManager = currentUser != null && currentUser.estGestionnaire();

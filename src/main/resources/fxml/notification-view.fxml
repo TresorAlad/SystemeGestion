@@ -4,6 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Vue de Notification (Succès / Erreur).
+    Affiche un message de confirmation ou d'erreur avec une icône et un bouton d'action.
+-->
 <BorderPane fx:controller="com.reservation.salles.ui.controller.NotificationController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
@@ -20,20 +24,24 @@
         </HBox>
     </top>
 
+    <!-- Conteneur centré pour le message de notification -->
     <center>
         <VBox alignment="CENTER" spacing="30" maxWidth="500">
             <padding>
                 <Insets top="40" right="40" bottom="40" left="40"/>
             </padding>
             <children>
+                <!-- Carte de notification -->
                 <VBox alignment="CENTER" spacing="20" styleClass="card">
                     <children>
+                        <!-- Icône de la notification (Succès/Erreur) -->
                         <StackPane>
                             <children>
                                 <Label fx:id="iconLabel" text="✓" styleClass="notification-icon-large"/>
                             </children>
                         </StackPane>
                         
+                        <!-- Textes de la notification -->
                         <VBox alignment="CENTER" spacing="8">
                             <children>
                                 <Label fx:id="messageLabel" text="Opération Réussie" styleClass="notification-title"/>
@@ -42,6 +50,7 @@
                             </children>
                         </VBox>
                         
+                        <!-- Bouton d'action pour la redirection -->
                         <Button fx:id="actionButton" onAction="#handleAction" 
                                 styleClass="primary-button" prefWidth="200"/>
                     </children>

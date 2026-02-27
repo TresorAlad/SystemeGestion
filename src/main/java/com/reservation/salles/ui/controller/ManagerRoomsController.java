@@ -33,6 +33,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Contrôleur pour la gestion des salles par le gestionnaire.
+ * Permet de visualiser toutes les salles sous forme de cartes, de filtrer par
+ * nom/type et de modifier/supprimer des salles.
+ */
 public class ManagerRoomsController {
 
     @FXML
@@ -50,9 +55,9 @@ public class ManagerRoomsController {
     private final ObservableList<Salle> toutesLesSalles = FXCollections.observableArrayList();
     private Map<String, Integer> quantitesEquipements = new HashMap<>();
 
-    // ---------------------------------------------------------------
-    // Init
-    // ---------------------------------------------------------------
+    /**
+     * Initialise l'utilisateur actuel et charge la liste des salles.
+     */
     public void setCurrentUser(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
         if (currentUserLabel != null && utilisateur != null) {
@@ -62,6 +67,10 @@ public class ManagerRoomsController {
         rafraichirCartes(toutesLesSalles);
     }
 
+    /**
+     * Ajoute un écouteur sur le champ de recherche pour filtrer les salles en temps
+     * réel.
+     */
     @FXML
     private void initialize() {
         if (searchField != null) {
@@ -69,9 +78,9 @@ public class ManagerRoomsController {
         }
     }
 
-    // ---------------------------------------------------------------
-    // Données
-    // ---------------------------------------------------------------
+    /**
+     * Récupère la liste exhaustive des salles depuis la base de données.
+     */
     private void chargerSalles() {
         toutesLesSalles.setAll(salleService.listerToutesLesSalles());
         quantitesEquipements.clear();
@@ -83,6 +92,9 @@ public class ManagerRoomsController {
         }
     }
 
+    /**
+     * Filtre la liste des salles affichées en fonction du texte saisi.
+     */
     private void appliquerFiltre(String texte) {
         if (texte == null || texte.isBlank()) {
             rafraichirCartes(toutesLesSalles);
@@ -96,9 +108,9 @@ public class ManagerRoomsController {
         rafraichirCartes(FXCollections.observableArrayList(filtre));
     }
 
-    // ---------------------------------------------------------------
-    // Affichage des cartes
-    // ---------------------------------------------------------------
+    /**
+     * Génère et affiche les cartes pour chaque salle fournie.
+     */
     private void rafraichirCartes(List<Salle> salles) {
         if (sallesFlow == null)
             return;
@@ -108,11 +120,15 @@ public class ManagerRoomsController {
         }
     }
 
+    /**
+     * Construit programmatiquement une carte graphique (`VBox`) pour représenter
+     * une salle.
+     */
     private VBox creerCarteSalle(Salle salle) {
         VBox card = new VBox(8);
         card.getStyleClass().add("room-card");
 
-        // --- Image avec badge disponibilité ---
+        // Image avec badge disponibilité
         StackPane imagePane = new StackPane();
         imagePane.getStyleClass().add("room-image");
 
@@ -131,15 +147,19 @@ public class ManagerRoomsController {
         clip.setArcHeight(16);
         imageView.setClip(clip);
 
-        Label badge = new Label(salle.isDisponible() ? "Disponible" : "Indisponible");
-        badge.getStyleClass().addAll("availability-badge",
-                salle.isDisponible() ? "availability-badge-on" : "availability-badge-off");
+        boolean occupee = salleService.estOccupeeMaintenant(salle.getIdSalle());
+        String texteStatut = !salle.isDisponible() ? "Indisponible" : (occupee ? "Occupé" : "Disponible");
+        String cssStatut = !salle.isDisponible() ? "availability-badge-off"
+                : (occupee ? "availability-badge-occupied" : "availability-badge-on");
+
+        Label badge = new Label(texteStatut);
+        badge.getStyleClass().addAll("availability-badge", cssStatut);
         StackPane.setAlignment(badge, Pos.TOP_RIGHT);
         StackPane.setMargin(badge, new Insets(8, 8, 0, 0));
 
         imagePane.getChildren().addAll(imageView, badge);
 
-        // --- Infos de la salle ---
+        // Données textuelles
         Label nomLabel = new Label(salle.getNom());
         nomLabel.getStyleClass().add("room-name");
 
@@ -149,15 +169,16 @@ public class ManagerRoomsController {
         Label capaLabel = new Label(salle.getCapacite() + " personnes");
         capaLabel.getStyleClass().add("room-meta");
 
-        // --- Chips équipements ---
+        // Equipements principaux (limité à 4 chips)
         HBox chips = new HBox(6);
         chips.setAlignment(Pos.CENTER);
-        chips.getChildren().addAll(
-                creerChip("Projecteur"),
-                creerChip("WiFi"),
-                creerChip("Tableau blanc"));
+        List<Equipement> equips = salle.getEquipements();
+        for (int i = 0; i < Math.min(equips.size(), 4); i++) {
+            Equipement eq = equips.get(i);
+            chips.getChildren().add(creerChipEquipement(eq));
+        }
 
-        // --- Boutons d'action ---
+        // Zone d'actions contextuelles
         VBox cardActions = new VBox(8);
         cardActions.setAlignment(Pos.CENTER);
 
@@ -188,17 +209,13 @@ public class ManagerRoomsController {
         return card;
     }
 
-    private Label creerChip(String nomEquipement) {
-        int qte = quantitesEquipements.getOrDefault(nomEquipement, 0);
-        String texte = qte > 0 ? nomEquipement + " (" + qte + ")" : nomEquipement;
+    private Label creerChipEquipement(Equipement eq) {
+        String texte = eq.getNom() + " (" + eq.getQuantite() + ")";
         Label chip = new Label(texte);
         chip.getStyleClass().add("room-chip");
         return chip;
     }
 
-    // ---------------------------------------------------------------
-    // Actions gestionnaire
-    // ---------------------------------------------------------------
     private void ouvrirReservation(Salle salle) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reservation-form.fxml"));
@@ -217,13 +234,16 @@ public class ManagerRoomsController {
         }
     }
 
+    /**
+     * Ouvre l'écran de modification de salle pré-rempli avec les données actuelles.
+     */
     private void ouvrirModification(Salle salle) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/salle-form.fxml"));
             Parent root = loader.load();
             SalleFormController controller = loader.getController();
             controller.setCurrentUser(currentUser);
-            controller.setSalle(salle); // pré-remplir le formulaire
+            controller.setSalle(salle); // Pré-remplissage
 
             Stage stage = (Stage) sallesFlow.getScene().getWindow();
             Scene scene = new Scene(root);
@@ -236,6 +256,10 @@ public class ManagerRoomsController {
         }
     }
 
+    /**
+     * Supprime définitivement une salle si aucune contrainte de clé étrangère
+     * n'existe.
+     */
     private void supprimerSalle(Salle salle) {
         boolean ok = salleService.supprimerSalle(salle.getIdSalle());
         if (ok) {
@@ -253,9 +277,6 @@ public class ManagerRoomsController {
         }
     }
 
-    // ---------------------------------------------------------------
-    // Navigation
-    // ---------------------------------------------------------------
     @FXML
     private void handleGoDashboard() {
         naviguer("/fxml/manager-dashboard.fxml", ctrl -> {
@@ -294,14 +315,18 @@ public class ManagerRoomsController {
         });
     }
 
-    // ---------------------------------------------------------------
-    // Utilitaire de navigation
-    // ---------------------------------------------------------------
+    /**
+     * Interface fonctionnelle pour injecter l'utilisateur dans le contrôleur de
+     * destination.
+     */
     @FunctionalInterface
     interface ControllerInitializer {
         void init(Object controller);
     }
 
+    /**
+     * Centralise la logique de changement de scène JavaFX.
+     */
     private void naviguer(String fxmlPath, ControllerInitializer initializer) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));

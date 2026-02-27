@@ -20,6 +20,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Contrôleur pour la gestion du profil utilisateur.
+ * Permet de modifier le nom et le mot de passe, et pour les gestionnaires,
+ * de promouvoir d'autres utilisateurs.
+ */
 public class ProfilController {
 
     @FXML
@@ -43,11 +48,18 @@ public class ProfilController {
     private Utilisateur currentUser;
     private final UtilisateurService utilisateurService = new UtilisateurService();
 
+    /**
+     * Définit l'utilisateur dont on affiche le profil et charge les informations.
+     */
     public void setCurrentUser(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
         chargerInfos();
     }
 
+    /**
+     * Remplit les champs du formulaire avec les données de l'utilisateur actuel.
+     * Affiche la section d'administration si l'utilisateur est gestionnaire.
+     */
     private void chargerInfos() {
         if (currentUser == null)
             return;
@@ -65,6 +77,10 @@ public class ProfilController {
         }
     }
 
+    /**
+     * Charge les utilisateurs standards dans la ComboBox pour permettre leur
+     * promotion.
+     */
     private void chargerListeUtilisateurs() {
         List<Utilisateur> allUsers = utilisateurService.listerTousLesUtilisateurs();
         // Filtrer pour ne montrer que les UTILISATEURS simples
@@ -86,6 +102,9 @@ public class ProfilController {
         });
     }
 
+    /**
+     * Promeut l'utilisateur sélectionné au rang de Gestionnaire.
+     */
     @FXML
     private void handlePromouvoir() {
         Utilisateur selected = userComboBox.getSelectionModel().getSelectedItem();
@@ -103,6 +122,9 @@ public class ProfilController {
                 currentUser);
     }
 
+    /**
+     * Enregistre les modifications apportées au profil (nom, mot de passe).
+     */
     @FXML
     private void handleSauvegarder() {
         String nouveauNom = nomField.getText();
@@ -153,6 +175,9 @@ public class ProfilController {
         }
     }
 
+    /**
+     * Bascule l'affichage du mot de passe entre masqué et visible.
+     */
     @FXML
     private void togglePassword() {
         if (isPasswordVisible) {

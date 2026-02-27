@@ -9,8 +9,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * DAO pour la gestion des utilisateurs (utilisateurs standards et
+ * gestionnaires).
+ */
 public class UtilisateurDAO {
 
+    /**
+     * Recherche un utilisateur par son adresse email.
+     */
     public Utilisateur findByEmail(String email) {
         String sql = "SELECT * FROM utilisateurs WHERE email = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -28,6 +35,9 @@ public class UtilisateurDAO {
         return null;
     }
 
+    /**
+     * Valide les identifiants de connexion (email et mot de passe).
+     */
     public Utilisateur findByEmailAndPassword(String email, String password) {
         String sql = "SELECT * FROM utilisateurs WHERE email = ? AND mot_de_passe = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -46,6 +56,9 @@ public class UtilisateurDAO {
         return null;
     }
 
+    /**
+     * Recherche un utilisateur par son ID unique.
+     */
     public Utilisateur findById(int id) {
         String sql = "SELECT * FROM utilisateurs WHERE id_utilisateur = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -63,6 +76,9 @@ public class UtilisateurDAO {
         return null;
     }
 
+    /**
+     * Enregistre un nouvel utilisateur (Inscription).
+     */
     public Utilisateur save(Utilisateur u) {
         String sql = "INSERT INTO utilisateurs (nom, email, mot_de_passe, role) VALUES (?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
@@ -85,6 +101,9 @@ public class UtilisateurDAO {
         return u;
     }
 
+    /**
+     * Liste tous les utilisateurs inscrits.
+     */
     public java.util.List<Utilisateur> findAll() {
         java.util.List<Utilisateur> list = new java.util.ArrayList<>();
         String sql = "SELECT * FROM utilisateurs ORDER BY nom";
@@ -100,6 +119,9 @@ public class UtilisateurDAO {
         return list;
     }
 
+    /**
+     * Met à jour le rôle d'un utilisateur ( प्रमोशन GESTIONNAIRE ).
+     */
     public void updateRole(int id, String role) {
         String sql = "UPDATE utilisateurs SET role = ? WHERE id_utilisateur = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -112,6 +134,9 @@ public class UtilisateurDAO {
         }
     }
 
+    /**
+     * Met à jour les informations de profil (Nom et Mot de passe).
+     */
     public void updateProfile(int id, String nom, String motDePasse) {
         String sql = "UPDATE utilisateurs SET nom = ?, mot_de_passe = ? WHERE id_utilisateur = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -125,6 +150,9 @@ public class UtilisateurDAO {
         }
     }
 
+    /**
+     * Mappe une ligne de ResultSet vers un objet Utilisateur.
+     */
     private Utilisateur map(ResultSet rs) throws SQLException {
         Utilisateur u = new Utilisateur();
         u.setIdUtilisateur(rs.getInt("id_utilisateur"));

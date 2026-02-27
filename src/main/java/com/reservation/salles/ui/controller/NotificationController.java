@@ -4,6 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+/**
+ * Contrôleur pour la vue de notification.
+ * Affiche des messages de succès ou d'erreur avec un titre, une description et
+ * une action.
+ */
 public class NotificationController {
 
     @FXML
@@ -17,6 +22,9 @@ public class NotificationController {
 
     private com.reservation.salles.model.Utilisateur currentUser;
 
+    /**
+     * Initialise la vue en mode Succès (icône verte, titre et description fournis).
+     */
     public void initSuccess(String message, String description, com.reservation.salles.model.Utilisateur user) {
         this.currentUser = user;
         iconLabel.setText("✓");
@@ -26,6 +34,9 @@ public class NotificationController {
         actionButton.setText("Continuer");
     }
 
+    /**
+     * Initialise la vue en mode Erreur (icône rouge, titre et description fournis).
+     */
     public void initError(String message, String description, com.reservation.salles.model.Utilisateur user) {
         this.currentUser = user;
         iconLabel.setText("✕");
@@ -35,6 +46,10 @@ public class NotificationController {
         actionButton.setText("Réessayer");
     }
 
+    /**
+     * Gère l'action du bouton (redirection vers le dashboard ou l'écran de
+     * connexion).
+     */
     @FXML
     private void handleAction() {
         try {
@@ -69,6 +84,9 @@ public class NotificationController {
         }
     }
 
+    /**
+     * Ferme la fenêtre actuelle de notification.
+     */
     public void close() {
         Stage stage = (Stage) messageLabel.getScene().getWindow();
         stage.close();

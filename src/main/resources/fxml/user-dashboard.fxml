@@ -4,11 +4,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Tableau de bord de l'utilisateur standard.
+    Affiche la liste des salles disponibles avec recherche et navigation vers l'historique.
+-->
 <BorderPane fx:controller="com.reservation.salles.ui.controller.UserDashboardController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
             styleClass="root-pane">
 
+    <!-- Barre supérieure : Titre application et informations utilisateur -->
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
@@ -24,6 +29,7 @@
         </HBox>
     </top>
 
+    <!-- Contenu principal du tableau de bord -->
     <center>
         <VBox spacing="24">
             <padding>
@@ -31,7 +37,7 @@
             </padding>
             <children>
 
-                <!-- barre d'onglets -->
+                <!-- Barre de navigation par onglets -->
                 <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button fx:id="btnDashboard"
@@ -50,9 +56,10 @@
                     </children>
                 </HBox>
 
+                <!-- Section d'affichage des salles -->
                 <VBox spacing="16" styleClass="card" VBox.vgrow="ALWAYS">
                     <children>
-                        <!-- En-tête avec titre + recherche -->
+                        <!-- Entête de la section : Titre et champ de recherche -->
                         <HBox spacing="16" alignment="CENTER_LEFT">
                             <children>
                                 <Label fx:id="totalSallesLabel" text="Toutes les salles" styleClass="section-title"/>
@@ -64,7 +71,7 @@
                             </children>
                         </HBox>
 
-                        <!-- grille de cartes de salles -->
+                        <!-- Grille défilante contenant les cartes des salles -->
                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
                                     hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
                             <content>

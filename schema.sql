@@ -33,6 +33,7 @@ CREATE TABLE equipements (
 CREATE TABLE salle_equipements (
     id_salle      INTEGER NOT NULL,
     id_equipement INTEGER NOT NULL,
+    quantite      INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id_salle, id_equipement),
     FOREIGN KEY (id_salle) REFERENCES salles(id_salle) ON DELETE CASCADE,
     FOREIGN KEY (id_equipement) REFERENCES equipements(id_equipement) ON DELETE CASCADE
@@ -64,20 +65,22 @@ CREATE TABLE demandes (
 
 INSERT INTO utilisateurs (nom, email, mot_de_passe, role) VALUES
 ('Utilisateur Test', 'user@esgis.org', 'password', 'UTILISATEUR'),
-('Gestionnaire Test', 'admin@esgis.org', 'admin', 'GESTIONNAIRE');
+('Gestionnaire ', 'admin@esgis.org', 'admin', 'GESTIONNAIRE');
 
 INSERT INTO salles (nom, type, capacite, disponible, photo) VALUES
-('Salle A', 'Réunion', 10, 1, 'jav.jpg'),
-('Salle B', 'Cours', 30, 1, 'jav.jpg'),
-('Salle C', 'Conférence', 100, 1, 'jav.jpg');
+('Salle 0-1', 'Cours', 10, 1, 'jav.jpg'),
+('Salle 0-2', 'Cours', 30, 1, 'jav.jpg'),
+('Salle 1-0', 'Conférence', 100, 1, 'jav.jpg'),
+('Salle 0-4', 'Réunion', 10, 1, 'jav.jpg'),
+('Salle 2-1', 'Cours', 40, 1, 'jav.jpg'),
+('Salle 2-3', 'Conférence', 120, 1, 'jav.jpg');
 
 INSERT INTO equipements (nom, quantite) VALUES
-('Projecteur', 2),
-('WiFi', 5),
+('Projecteur', 1),
+('WiFi', 2),
 ('Climatiseur', 5),
 ('Tableau', 3),
 ('Ecran', 3);
 
-INSERT INTO salle_equipements (id_salle, id_equipement) VALUES
-(1,1),(1,2),(2,2),(2,3),(3,1),(3,2),(3,3);
-
+INSERT INTO salle_equipements (id_salle, id_equipement, quantite) VALUES
+(1, 1, 2), (1, 2, 3), (2, 2, 1), (2, 3, 2), (3, 1, 3), (3, 2, 1), (3, 3, 2);

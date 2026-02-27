@@ -22,6 +22,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Contrôleur pour le tableau de bord du gestionnaire.
+ * Affiche des statistiques globales et les réservations en attente
+ * d'approbation.
+ */
 public class ManagerDashboardController {
 
     @FXML
@@ -50,12 +55,19 @@ public class ManagerDashboardController {
     private final SalleService salleService = new SalleService();
     private final ObservableList<Reservation> reservationsRecentes = FXCollections.observableArrayList();
 
+    /**
+     * Définit l'utilisateur actuel et déclenche le chargement des données du
+     * dashboard.
+     */
     public void setCurrentUser(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
         currentUserLabel.setText(utilisateur.getNom());
         chargerDashboard();
     }
 
+    /**
+     * Configure les colonnes de la table des réservations récentes.
+     */
     @FXML
     private void initialize() {
         if (colSalle != null) {
@@ -85,6 +97,9 @@ public class ManagerDashboardController {
         }
     }
 
+    /**
+     * Applique un style visuel différent (chips) selon le statut de la réservation.
+     */
     private void configurerStatut() {
         colStatut.setCellFactory(column -> new TableCell<>() {
             private final Label label = new Label();
@@ -111,6 +126,10 @@ public class ManagerDashboardController {
         });
     }
 
+    /**
+     * Ajoute des boutons Accepter/Rejeter directement dans la table pour les
+     * demandes en attente.
+     */
     private void configurerActions() {
         colActions.setCellFactory(param -> new TableCell<>() {
             private final Button btnValider = new Button("Accepter");
@@ -159,8 +178,12 @@ public class ManagerDashboardController {
         });
     }
 
+    /**
+     * Récupère et affiche les métriques (compteurs) et la liste des dernières
+     * réservations.
+     */
     private void chargerDashboard() {
-        // métriques
+        // Métriques globales
         int actives = reservationService.compterReservationsActives();
         int dispos = salleService.compterDisponibles();
         if (reservationsActivesLabel != null) {
@@ -169,7 +192,7 @@ public class ManagerDashboardController {
         if (sallesDisponiblesLabel != null) {
             sallesDisponiblesLabel.setText(String.valueOf(dispos));
         }
-        // réservations récentes
+        // Réservations récentes (limité aux 10 dernières)
         reservationsRecentes.setAll(reservationService.listerRecentes(10));
     }
 

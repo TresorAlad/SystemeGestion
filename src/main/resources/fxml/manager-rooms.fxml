@@ -4,11 +4,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Vue Gestion des salles (Gestionnaire).
+    Affiche toutes les salles avec des options d'édition et de suppression.
+-->
 <BorderPane fx:controller="com.reservation.salles.ui.controller.ManagerRoomsController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
             styleClass="root-pane">
 
+    <!-- Barre supérieure : Titre et Profil -->
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding>
@@ -24,6 +29,7 @@
         </HBox>
     </top>
 
+    <!-- Contenu principal -->
     <center>
         <VBox spacing="24">
             <padding>
@@ -31,6 +37,7 @@
             </padding>
             <children>
 
+                <!-- Barre de navigation par onglets -->
                 <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
@@ -51,9 +58,10 @@
                     </children>
                 </HBox>
 
+                <!-- Section d'affichage et de recherche des salles -->
                 <VBox spacing="16" styleClass="card">
                     <children>
-                        <!-- En-tête avec titre + recherche -->
+                        <!-- En-tête de section avec titre et barre de recherche -->
                         <HBox spacing="16" alignment="CENTER_LEFT">
                             <children>
                                 <Label fx:id="totalSallesLabel" text="Mes salles" styleClass="section-title"/>
@@ -65,7 +73,7 @@
                             </children>
                         </HBox>
 
-                        <!-- Grille de cartes identique au user dashboard -->
+                        <!-- Grille défilante des salles existantes -->
                         <ScrollPane fitToWidth="true" prefViewportHeight="400"
                                     hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
                             <content>

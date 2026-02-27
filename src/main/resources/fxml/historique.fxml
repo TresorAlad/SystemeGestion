@@ -4,11 +4,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Vue Historique des réservations.
+    Affiche la liste des réservations passées et présentes de l'utilisateur.
+-->
 <BorderPane fx:controller="com.reservation.salles.ui.controller.HistoriqueController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="960" prefHeight="540"
             styleClass="root-pane">
 
+    <!-- Barre supérieure de navigation -->
     <top>
         <HBox spacing="16" styleClass="top-bar">
             <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
@@ -23,12 +28,13 @@
         </HBox>
     </top>
 
+    <!-- Corps de la page -->
     <center>
         <VBox spacing="24">
             <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
             <children>
 
-                <!-- onglets (même style que user-dashboard) -->
+                <!-- Menu de navigation par onglets -->
                 <HBox spacing="8" alignment="CENTER" styleClass="nav-bar">
                     <children>
                         <Button text="Tableau de bord"
@@ -44,19 +50,19 @@
                     </children>
                 </HBox>
 
+                <!-- Tableau affichant les données de l'historique -->
                 <TableView fx:id="reservationsTable"
-           prefHeight="360"
-           styleClass="modern-table">
-
-    <columns>
-        <TableColumn fx:id="colId" text="Nom complet" prefWidth="180"/>
-        <TableColumn fx:id="colSalle" text="Salle" prefWidth="150"/>
-        <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
-        <TableColumn fx:id="colHeure" text="Horaire" prefWidth="120"/>
-        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
-        <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
-    </columns>
-</TableView>
+                           prefHeight="360"
+                           styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="colId" text="Nom complet" prefWidth="180"/>
+                        <TableColumn fx:id="colSalle" text="Salle" prefWidth="150"/>
+                        <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
+                        <TableColumn fx:id="colHeure" text="Horaire" prefWidth="120"/>
+                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
+                    </columns>
+                </TableView>
 
             </children>
         </VBox>

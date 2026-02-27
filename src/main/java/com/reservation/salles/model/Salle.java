@@ -1,17 +1,27 @@
 package com.reservation.salles.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Représente une salle de réunion ou de conférence.
+ */
 public class Salle {
 
     private int idSalle;
     private String nom;
-    private String type;
+    private String type; // ex: Réunion, Conférence, Labo
     private int capacite;
-    private boolean disponible;
-    private String photo;
+    private boolean disponible; // Etat général (active ou non)
+    private String photo; // Chemin de l'image
+    private List<Equipement> equipements = new ArrayList<>();
 
     public Salle() {
     }
 
+    /**
+     * Constructeur rapide pour l'initialisation.
+     */
     public Salle(int idSalle, String nom, String type, int capacite, boolean disponible) {
         this.idSalle = idSalle;
         this.nom = nom;
@@ -20,6 +30,7 @@ public class Salle {
         this.disponible = disponible;
     }
 
+    // Getters et Setters
     public int getIdSalle() {
         return idSalle;
     }
@@ -68,9 +79,19 @@ public class Salle {
         this.photo = photo;
     }
 
+    /**
+     * Récupère la liste des équipements présents dans la salle.
+     */
+    public List<Equipement> getEquipements() {
+        return equipements;
+    }
+
+    public void setEquipements(List<Equipement> equipements) {
+        this.equipements = equipements;
+    }
+
     @Override
     public String toString() {
         return nom + " (" + capacite + " places)";
     }
 }
-

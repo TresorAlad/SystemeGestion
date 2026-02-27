@@ -21,6 +21,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Contrôleur pour l'affichage de la liste complète des réservations (vue
+ * Gestionnaire).
+ * Permet au gestionnaire de voir et d'annuler n'importe quelle réservation.
+ */
 public class ReservationsListController {
 
     @FXML
@@ -45,6 +50,10 @@ public class ReservationsListController {
     private final ReservationService reservationService = new ReservationService();
     private final ObservableList<Reservation> reservations = FXCollections.observableArrayList();
 
+    /**
+     * Initialise le contrôleur avec l'utilisateur et charge les réservations
+     * appropriées.
+     */
     public void initData(Utilisateur utilisateur) {
         this.currentUser = utilisateur;
         if (currentUserLabel != null && utilisateur != null) {
@@ -53,6 +62,10 @@ public class ReservationsListController {
         chargerReservations();
     }
 
+    /**
+     * Configure l'affichage des colonnes et les comportements dynamiques de la
+     * table.
+     */
     @FXML
     private void initialize() {
         if (colSalle != null) {
@@ -79,7 +92,7 @@ public class ReservationsListController {
                     (cell.getValue() != null && cell.getValue().getStatut() != null) ? cell.getValue().getStatut()
                             : ""));
 
-            // Cellule personnalisée pour afficher un badge coloré selon le statut
+            // Badge de couleur pour le statut
             colStatut.setCellFactory(column -> new TableCell<Reservation, String>() {
                 private final Label label = new Label();
 
@@ -91,7 +104,7 @@ public class ReservationsListController {
                         return;
                     }
 
-                    label.getStyleClass().setAll("status-chip"); // reset
+                    label.getStyleClass().setAll("status-chip");
                     String upper = statut.toUpperCase();
                     if ("VALIDEE".equals(upper) || "CONFIRMEE".equals(upper)) {
                         label.getStyleClass().add("status-chip-success");
@@ -109,6 +122,7 @@ public class ReservationsListController {
                     cell -> new SimpleStringProperty(
                             cell.getValue() != null ? cell.getValue().getNomReservataire() : ""));
 
+            // Boutons Détails et Annuler
             colActions.setCellFactory(column -> new TableCell<Reservation, String>() {
                 private final Button detailBtn = new Button("Détails");
                 private final Button annulerBtn = new Button("Annuler");
@@ -172,6 +186,9 @@ public class ReservationsListController {
         }
     }
 
+    /**
+     * Récupère la liste des réservations via le service.
+     */
     private void chargerReservations() {
         if (currentUser != null) {
             if (currentUser.estGestionnaire()) {
@@ -182,6 +199,9 @@ public class ReservationsListController {
         }
     }
 
+    /**
+     * Annule la réservation sélectionnée.
+     */
     @FXML
     private void handleAnnuler() {
         Reservation selected = reservationsTable.getSelectionModel().getSelectedItem();

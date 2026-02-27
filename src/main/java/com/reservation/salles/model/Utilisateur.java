@@ -1,5 +1,10 @@
 package com.reservation.salles.model;
 
+/**
+ * Représente un utilisateur du système.
+ * Un utilisateur peut être soit un demandeur standard, soit un gestionnaire des
+ * salles.
+ */
 public class Utilisateur {
 
     private int idUtilisateur;
@@ -11,6 +16,9 @@ public class Utilisateur {
     public Utilisateur() {
     }
 
+    /**
+     * Constructeur complet pour un utilisateur.
+     */
     public Utilisateur(int idUtilisateur, String nom, String email, String motDePasse, String role) {
         this.idUtilisateur = idUtilisateur;
         this.nom = nom;
@@ -19,6 +27,7 @@ public class Utilisateur {
         this.role = role;
     }
 
+    // Getters et Setters standard avec commentaires descriptifs
     public int getIdUtilisateur() {
         return idUtilisateur;
     }
@@ -59,12 +68,21 @@ public class Utilisateur {
         this.role = role;
     }
 
+    /**
+     * Vérifie si l'utilisateur possède les droits de gestionnaire.
+     * 
+     * @return true si l'utilisateur est un gestionnaire.
+     */
     public boolean estGestionnaire() {
         return "GESTIONNAIRE".equalsIgnoreCase(role);
     }
 
+    /**
+     * Vérifie si l'utilisateur est un simple utilisateur standard.
+     * 
+     * @return true si le rôle est UTILISATEUR.
+     */
     public boolean estUtilisateur() {
         return "UTILISATEUR".equalsIgnoreCase(role);
     }
 }
-

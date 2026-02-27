@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contrôleur pour le formulaire d'ajout d'équipements à une salle.
+ * Permet de sélectionner des équipements existants ou d'en définir de nouveaux.
+ */
 public class EquipementsFormController {
 
     @FXML
@@ -44,8 +48,37 @@ public class EquipementsFormController {
     private final SalleService salleService = new SalleService();
     private Salle salleToSave;
 
+    /**
+     * Définit la salle à laquelle on ajoute des équipements.
+     * Pré-remplit les champs si la salle a déjà des équipements.
+     */
     public void setSalle(Salle salle) {
         this.salleToSave = salle;
+        if (salle != null && !salle.getEquipements().isEmpty()) {
+            preRemplirChamps(salle.getEquipements());
+        }
+    }
+
+    /**
+     * Remplit les champs du formulaire avec les équipements existants (max 4).
+     */
+    private void preRemplirChamps(List<Equipement> equips) {
+        if (equips.size() >= 1) {
+            nom1Field.setValue(equips.get(0).getNom());
+            qte1Field.setText(String.valueOf(equips.get(0).getQuantite()));
+        }
+        if (equips.size() >= 2) {
+            nom2Field.setValue(equips.get(1).getNom());
+            qte2Field.setText(String.valueOf(equips.get(1).getQuantite()));
+        }
+        if (equips.size() >= 3) {
+            nom3Field.setValue(equips.get(2).getNom());
+            qte3Field.setText(String.valueOf(equips.get(2).getQuantite()));
+        }
+        if (equips.size() >= 4) {
+            nom4Field.setValue(equips.get(3).getNom());
+            qte4Field.setText(String.valueOf(equips.get(3).getQuantite()));
+        }
     }
 
     @FXML
@@ -53,6 +86,9 @@ public class EquipementsFormController {
         loadEquipementOptions();
     }
 
+    /**
+     * Charge les suggestions de noms d'équipements depuis le catalogue.
+     */
     private void loadEquipementOptions() {
         List<Equipement> existing = equipementService.listerEquipements();
         List<String> names = existing.stream().map(Equipement::getNom).distinct().toList();
@@ -70,6 +106,9 @@ public class EquipementsFormController {
         }
     }
 
+    /**
+     * Collecte les équipements saisis et finalise la sauvegarde de la salle.
+     */
     @FXML
     private void handleAjouter() {
         List<Equipement> equipements = new ArrayList<>();
@@ -90,14 +129,15 @@ public class EquipementsFormController {
             return;
         }
 
-        // Sauvegarder la salle d'abord
+        // Sauvegarde physique de la salle
         if (salleToSave.getIdSalle() == 0) {
             salleService.ajouterSalle(salleToSave);
         } else {
             salleService.modifierSalle(salleToSave);
         }
 
-        equipementService.enregistrerEquipements(equipements);
+        // Liaison Many-to-Many
+        salleService.lierEquipementsASalle(salleToSave.getIdSalle(), equipements);
 
         String actionType = (salleToSave.getIdSalle() == 0) ? "créée" : "modifiée";
         NotificationUtil.showSuccess(
@@ -108,16 +148,21 @@ public class EquipementsFormController {
                 currentUser);
     }
 
+    /**
+     * Extrait les données d'un couple (Champ Nom, Champ Quantité).
+     */
     private void ajouterDepuisChamps(ComboBox<String> nomField, TextField qteField, List<Equipement> equipements) {
         String nom = nomField.getValue();
         String qteStr = qteField.getText();
-        if (nom != null && !nom.isBlank() && qteStr != null && !qteStr.isBlank()) {
-            try {
-                int qte = Integer.parseInt(qteStr);
-                equipements.add(new Equipement(0, nom, qte));
-            } catch (NumberFormatException e) {
-                // on ignore les lignes invalides mais on pourrait aussi notifier
+        if (nom != null && !nom.isBlank()) {
+            int qte = 1; // Par défaut si vide
+            if (qteStr != null && !qteStr.isBlank()) {
+                try {
+                    qte = Integer.parseInt(qteStr);
+                } catch (NumberFormatException ignored) {
+                }
             }
+            equipements.add(new Equipement(0, nom, qte));
         }
     }
 
