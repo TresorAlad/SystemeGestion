@@ -25,7 +25,7 @@ public class MainApp extends Application {
 
         primaryStage.setTitle("Système de réservation de salles");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 

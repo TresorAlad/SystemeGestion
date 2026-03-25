@@ -8,15 +8,13 @@
     Vue d'inscription (Register).
     Permet à un nouvel utilisateur de créer son compte en saisissant son nom, email et mot de passe.
 -->
-<AnchorPane fx:controller="com.reservation.salles.ui.controller.RegisterController"
-            xmlns:fx="http://javafx.com/fxml"
-            prefWidth="960" prefHeight="540"
-            styleClass="root-pane">
+<StackPane fx:controller="com.reservation.salles.ui.controller.RegisterController"
+           xmlns:fx="http://javafx.com/fxml"
+           minWidth="960" minHeight="540"
+           styleClass="root-pane">
     <children>
         <!-- Formulaire d'inscription -->
-        <VBox spacing="14" alignment="CENTER"
-              AnchorPane.topAnchor="70" AnchorPane.leftAnchor="220"
-              AnchorPane.rightAnchor="220" AnchorPane.bottomAnchor="70"
+        <VBox spacing="14" alignment="CENTER" maxWidth="500" maxHeight="520"
               styleClass="card">
             <padding>
                 <Insets topRightBottomLeft="28"/>
@@ -83,5 +81,5 @@
             </children>
         </VBox>
     </children>
-</AnchorPane>
+</StackPane>
 

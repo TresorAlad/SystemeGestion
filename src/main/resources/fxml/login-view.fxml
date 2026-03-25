@@ -8,15 +8,16 @@
     Vue de connexion (Login).
     Permet à l'utilisateur de s'authentifier par email et mot de passe.
 -->
-<AnchorPane fx:controller="com.reservation.salles.ui.controller.LoginController"
-            xmlns:fx="http://javafx.com/fxml"
-            prefWidth="960" prefHeight="540"
-            styleClass="root-pane">
+<StackPane fx:controller="com.reservation.salles.ui.controller.LoginController"
+           xmlns:fx="http://javafx.com/fxml"
+           minWidth="960" minHeight="540"
+           styleClass="root-pane">
     <children>
         <!-- Conteneur central du formulaire de connexion -->
-        <VBox spacing="18" alignment="CENTER"
-              AnchorPane.topAnchor="80" AnchorPane.leftAnchor="220"
-              AnchorPane.rightAnchor="220" AnchorPane.bottomAnchor="80">
+        <VBox spacing="18" alignment="CENTER" maxWidth="480" maxHeight="500" styleClass="card">
+            <padding>
+                <Insets topRightBottomLeft="24"/>
+            </padding>
             <children>
                 <Label text="Bienvenue!" styleClass="login-title"/>
                 <Label text="Connectez-vous à votre compte"
@@ -27,6 +28,7 @@
                 <TextField fx:id="emailField" promptText="exemple@gmail.com"
                            maxWidth="340" styleClass="text-input"/>
 
+                <Label text="Password"/>
                 <!-- Champ mot de passe avec option de visibilité -->
                 <StackPane maxWidth="340">
                     <children>
@@ -59,5 +61,5 @@
             </children>
         </VBox>
     </children>
-</AnchorPane>
+</StackPane>
 
